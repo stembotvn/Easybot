@@ -28,7 +28,7 @@ STEMbot đang tích hợp việc lập trình Easybot từ Mblock Scratch, ngôn
     int value = Robot.readSensor(Channel);  //gán giá trị Analog đọc từ sensor vào biến value kiểu Interger, Channel = LEFTSENSOR,CENTERSENSOR, RIGHTSENSOR
 				
     Serial.println(value); //xuất giá trị analog từ Sensor ra màn hình PC (Từ Arduino IDE vào Tools/Serial Monitor)
-    bool result = Robot.left(); // Trả về giá trị Logic là 0 hay 1 (True or False) cho cảm biến dò line trái (0: không có vạch, 1: có vạch)
+    bool result = Robot.leftSensor(); // Trả về giá trị Logic là 0 hay 1 (True or False) cho cảm biến dò line trái (0: không có vạch, 1: có vạch)
     Serial.print(Robot.leftSensor());//xuất giá trị kết quả (1 or 0) phân tích từ analog Sensor, ngưỡng mặc định so sánh để phát hiện vạch kẻ là 400
    
      /* #define line_detect  number 
