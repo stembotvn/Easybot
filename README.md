@@ -20,6 +20,7 @@ STEMbot đang tích hợp việc lập trình Easybot từ Mblock Scratch, ngôn
     EasybotNano Robot; // Một đối tượng robot tên là Robot được tạo ra từ lớp EasybotNano
 ````
 ### Các hàm di chuyển
+
 ```
     Robot.moveForward(speed); //với speed = 0-100(%) 	điều khiển robot di chuyển đi tới với tốc độ speed (bánh bên phải chạy với tốc độ = speed, bánh trái chạy với tốc độ = speed
 ```
@@ -41,6 +42,7 @@ STEMbot đang tích hợp việc lập trình Easybot từ Mblock Scratch, ngôn
 ```
     Robot.turnright(speed,time); // hàm quay phải nâng cao với speed = 0 - 100(%): tham số tốc độ , time = 0 -10 :tham số thời gian-> Quay phải robot với tốc độ = speed trong khoảng thời gian là time x 0.1s 		
 ```
+### Các hàm đọc các cảm biến đi theo combo của Wibot (cảm biến dò line và cảm biến siêu âm đo khoảng cách)
 ``` 
     int value = Robot.readSensor(Channel);  //gán giá trị Analog đọc từ sensor vào biến value kiểu Interger, Channel = LEFTSENSOR,CENTERSENSOR, RIGHTSENSOR
 
