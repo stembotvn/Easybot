@@ -14,32 +14,47 @@ STEMbot đang tích hợp việc lập trình Easybot từ Mblock Scratch, ngôn
   Khởi động lại Arduino IDE, chọn Tools/Board/Arduino Nano
   Vào Files/Examples/Easybot để xem code mẫu
 ## Sử dụng thư viện:
+### Khởi tạo 
+```
      #include <Easybot.h>
     EasybotNano Robot; // Một đối tượng robot tên là Robot được tạo ra từ lớp EasybotNano
+````
+### Các hàm di chuyển
+```
     Robot.moveForward(speed); //với speed = 0-100(%) 	điều khiển robot di chuyển đi tới với tốc độ speed (bánh bên phải chạy với tốc độ = speed, bánh trái chạy với tốc độ = speed
-
+```
+```
     Robot.moveForward(LeftSpeed,rightSpeed); //với leftSpeed, rightSpeed = 0-100 (%), điều khiển robot đi thẳng với tốc độ bên trái và bên phải tùy chỉnh. 
+```
+```
     Robot.moveBack(speed); // với speed = 0-100(%) 	điều khiển robot di chuyển đi lùi với tốc độ speed (bánh bên phải chạy với tốc độ = speed, bánh trái chạy với tốc độ = speed
+```
+```
     Robot.turnLeft(speed); //với speed = 0 - 100(%), điều khiển robot quay trái, tâm quay tại tâm robot, bánh trái quay lùi với tốc độ speed, bánh phải quay tới với tốc độ speed 
+```
+```
     Robot.turnRight(speed); //với speed = 0 - 100(%), điều khiển robot quay phải, tâm quay tại tâm robot, bánh phải quay lùi với tốc độ speed, bánh trái quay tới với tốc độ speed 
+```
+```
     Robot.turnLeft(speed,time);// hàm quay trái nâng cao với speed = 0 - 100(%): tham số tốc độ , time = 0 -10 :tham số thời gian-> Quay trái robot với tốc độ = speed trong khoảng thời gian là time x 0.1s
+```
+```
     Robot.turnright(speed,time); // hàm quay phải nâng cao với speed = 0 - 100(%): tham số tốc độ , time = 0 -10 :tham số thời gian-> Quay phải robot với tốc độ = speed trong khoảng thời gian là time x 0.1s 		
-
+```
+``` 
     int value = Robot.readSensor(Channel);  //gán giá trị Analog đọc từ sensor vào biến value kiểu Interger, Channel = LEFTSENSOR,CENTERSENSOR, RIGHTSENSOR
-				
+
     Serial.println(value); //xuất giá trị analog từ Sensor ra màn hình PC (Từ Arduino IDE vào Tools/Serial Monitor)
-    bool result = Robot.leftSensor(); // Trả về giá trị Logic là 0 hay 1 (True or False) cho cảm biến dò line trái (0: không có vạch, 1: có vạch)
-    Serial.print(Robot.leftSensor());//xuất giá trị kết quả (1 or 0) phân tích từ analog Sensor, ngưỡng mặc định so sánh để phát hiện vạch kẻ là 400
-   
-     /* #define line_detect  number 
-     trước khi #include <Easybot.h>; */
-	  
-	vd: #define line_detect 250 //ngưỡng phát hiện vạch là 250
-        #include <Easybot.h>
-     your code .......		
-    
-     int value = Robot.readSonar(); //Đọc cảm biến siêu âm SRF04 gán giá trị đo khoảng cách tính bằng Cm vào biến Value kiểu Interger
-	
+```
+```
+bool result = Robot.leftSensor(); // Trả về giá trị Logic là 0 hay 1 (True or False) cho cảm biến dò line trái (0: không có vạch, 1: có vạch)
+```
+```
+Serial.print(Robot.leftSensor()); //xuất giá trị kết quả (1 or 0) phân tích từ analog Sensor, ngưỡng mặc định so sánh để phát hiện vạch kẻ là 400
+```   
+```   
+ int value = Robot.readSonar(); //Đọc cảm biến siêu âm SRF04 gán giá trị đo khoảng cách tính bằng Cm vào biến Value kiểu Interger
+```	
  
     
   
