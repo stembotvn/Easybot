@@ -103,28 +103,39 @@ for (i=0;i<time;i++)
  delay(200);
 
 }
+////////////////////////////////
+void EasybotNano::setup_lineSensor(int color, int threshold_detect){
+_LINE_COLOR = color;
+_line_detect = threshold_detect; 
+pinMode(lineSensor_enable,OUTPUT);
+}
 
 //////////////////////////////////
 int EasybotNano::readSensor(int channel)
 {
-
+digitalWrite(lineSensor_enable,HIGH);
  int line_value = analogRead(channel);
+digitalWrite(lineSensor_enable,LOW);
+
  return line_value;
 }
 ///////////////////////////////////////////////////////
 bool EasybotNano::leftSensor(){
 bool color;	
 int value;
+digitalWrite(lineSensor_enable,HIGH);
 value = analogRead(leftline_pin);
-color  =  LINE_COLOR; 
+digitalWrite(lineSensor_enable,LOW);
+
+color  =  _LINE_COLOR; 
    if (color == BLACK) 
     {
-     if (value>line_detect) return 1;
+     if (value>_line_detect) return 1;
      else return 0;
     }
    else 
    {
-      if (value<line_detect) return 1;
+      if (value<_line_detect) return 1;
       else return 0;
    }
 }
@@ -132,16 +143,20 @@ color  =  LINE_COLOR;
 bool EasybotNano::rightSensor(){
 bool color;
 int value;		
+
+digitalWrite(lineSensor_enable,HIGH);
  value = analogRead(rightline_pin);
- color  =  LINE_COLOR; 
+digitalWrite(lineSensor_enable,LOW);
+
+ color  =  _LINE_COLOR; 
    if (color == BLACK) 
     {
-     if (value>line_detect) return 1;
+     if (value>_line_detect) return 1;
      else return 0;
     }
    else 
    {
-      if (value<line_detect) return 1;
+      if (value<_line_detect) return 1;
       else return 0;
    }
 
@@ -149,17 +164,21 @@ int value;
 ///////////////////////////////////////////////////
 bool EasybotNano::centerSensor(){
 bool color;
-int value;		
+int value;	
+
+digitalWrite(lineSensor_enable,HIGH);
  value = analogRead(centerline_pin);
- color  =  LINE_COLOR; 
+digitalWrite(lineSensor_enable,LOW);
+ 
+ color  =  _LINE_COLOR; 
    if (color == BLACK) 
     {
-     if (value>line_detect) return 1;
+     if (value>_line_detect) return 1;
      else return 0;
     }
    else 
    {
-      if (value<line_detect) return 1;
+      if (value<_line_detect) return 1;
       else return 0;
    }
 }

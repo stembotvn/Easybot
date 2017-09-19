@@ -27,7 +27,16 @@ EasybotNano Robot;
  
  
 void setup() {
-
+Robot.setup_lineSensor(BLACK,400);    //Set up cảm biến dò line nhận line màu đen nền trắng, ngưỡng phát hiện là 400 (dãi : có vạch 900, không vạch 30)
+int distance = Robot.readSonar();  
+while (distance > 10)  
+{
+    Serial.print("READY! Sonar Sensor: "); Serial.println(distance); 
+    delay(1000);
+    distance = Robot.readSonar();  
+ }
+Serial.println("START!");  
+Robot.moveForward(100);
 }
 
 ///////
@@ -42,7 +51,7 @@ Robot.turnLeft(90);
   Robot.turnRight(90);
  }
 
- delay(5);
+// delay(5);
 
 
 }
@@ -55,3 +64,4 @@ Robot.turnLeft(90);
 
 
 
+:

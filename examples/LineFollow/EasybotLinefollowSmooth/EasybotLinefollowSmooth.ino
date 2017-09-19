@@ -23,51 +23,61 @@ Chương trình Demo thuật toán dò đường mịn
  */
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "Easybot.h"
+#include <Easybot.h>
 
-EasybotNano robot; 
+EasybotNano Robot; 
 
  
  int linespeed = 90 ;              //speed for linefollow process
- int adjspeed = 60; 
+ int adjspeed = 65; 
  int turn_speed = 65;
  bool r=0;   // biến boolean lưu cờ nhớ trạng thái lệch trái
  bool l=0;   // biến boolean lưu cờ nhớ trạng thái lệch phải
  
 void setup() {
-
+Robot.setup_lineSensor(BLACK,500); // vạch đen, ngưỡng phát hiện là 500
 Serial.begin(9600);
+Robot.stop(); 
 delay(2000);
+  // chờ cho đến khi phất tay ra hiệu trước mắt Robot (khoảng cách <= 10cm)
+ int distance = Robot.readSonar();  
+while (distance > 10)  
+{
+    Serial.print("READY! Sonar Sensor: "); Serial.println(distance); 
+    delay(1000);
+    distance = Robot.readSonar();  
+ }
+Serial.println("START!");
+Robot.moveForward(linespeed);  
 }
-
+///////
 ///////
 void loop()
 {
  
- if (robot.centerSensor() == true) {  //process if center sensor detected
-  robot.moveForward(linespeed);
+ if (Robot.centerSensor() == true) {  //process if center sensor detected
+  Robot.moveForward(linespeed);
   }   
 
-else if (robot.leftSensor() == true) {     //process if left Sensor detected
-robot.moveForward(adjspeed,linespeed);l=1;
+else if (Robot.leftSensor() == true) {     //process if left Sensor detected
+Robot.moveForward(adjspeed,linespeed);l=1;
 }
- else if (robot.rightSensor() == true) {   //process if right Sensor detected          
- robot.moveForward(linespeed,adjspeed);
+ else if (Robot.rightSensor() == true) {   //process if right Sensor detected          
+ Robot.moveForward(linespeed,adjspeed);
  r=1; 
  }
   else                                    //process if no line detected -> loss line
   {
-   if (l==true)  {robot.turnLeft(turn_speed);
+   if (l==true)  {Robot.turnLeft(turn_speed);
    l=false;
    } 
-   else if (r ==true) {robot.turnRight(turn_speed);
+   else if (r ==true) {Robot.turnRight(turn_speed);
    r=false;
    }
   }
 
 
 }
-
 
 
 

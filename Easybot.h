@@ -1,16 +1,16 @@
 /*
 Class for Stembot platform 
 an open source STEM robotics for kids
-Things Changing Technology.
+http://stembot.vn
 
 Stembot V1.0 
    Base: 2 wheel DC motor 
-   Consol: RJ45 Analog mux interface base on CD4051 8 channels 
-   Sensor:  2 Side IR Line detector sensors via analog input
-            1 center IR dots detector sensor via analog input
-            Ultra Sonic Range finder sensor SR-04 for detect Monster (expansion) include Micro Servo SG90
-   Actuator: Mouth by Servo SG90 
-   Interface: Run Button, Upload Button, RGB LED indicator, Speaker 			 
+   Sensor:  Line following Sensor 3 channels Analog with Enable Pin to active Sensor
+   
+            Ultra Sonic Range finder sensor SR-04 for detect object
+	HC-06 Bluetooth Interface Via Software Serial
+    NRF24L01 Interface	
+   		 
 
 */
 #ifndef Easybot_H_
@@ -30,12 +30,13 @@ Stembot V1.0
 #define leftline_pin        0							///
 #define rightline_pin       2							///
 #define centerline_pin      1	
+#define lineSensor_enable   A3
 #define leftline_pin2       
 #define rightline_pin2			              			///
 //#define battery_monitor_pin 4     					///
-#define SR04_Trig             3							///
-#define SR04_Echo             2							///
-#define Servo1_pin           11                         ///
+#define SR04_Trig             4							///
+#define SR04_Echo             3							///
+//#define Servo1_pin           11                         ///
 ///////////////////////////////////////////////////////////
 
 //define for EasybotNano Board with L9110S Driver
@@ -45,12 +46,13 @@ Stembot V1.0
 #define rightMotor_pinA   9          //_pinB1A      ///
 #define rightMotor_pinB   10         //_pinB1B      ///
                  ///
-
+/*
 //define for NanoBoard with L298/L293 Driver ///
 #define leftMotorDir_pin      9      //_pinB1A       ///
 #define leftMotorPWM_pin      6      //_pinB1B       ///
 #define rightMotorDir_pin     10     //_pinB1A       ///
 #define rightMotorPWM_pin     11       //_pinB1B     ///
+*/
 
 
  														///
@@ -111,6 +113,7 @@ public:
 	void turnRight(int speed,int time);  //turn to the right, time interval is 100ms <-> const angle
 	void turnLeft(int speed);            //turn robot to the left || Quay robot sang trái
 	void turnLeft(int speed,int time);   //turn to the left, time interval is 100ms <-> const angle
+  void setup_lineSensor(int color, int threshold_detect);
 	int  readSensor(int channel);        ///Read line sensor with customized channel, return raw value, Channel is LEFTSENSOR, RIGHTSENSOR, CENTERSENSOR
 	bool leftSensor();                   //Read sensor detection, return 1 if detect line, return 0 if not detect line
 	bool rightSensor();                  //Read Right line sensor, return 1 if detect line, return 0 if not detect line
@@ -121,6 +124,8 @@ private:
    EasyMotorL9110 RightMotor;
    EasyMotorL9110 LeftMotor;
    EasySonar Distance;
+   int _LINE_COLOR = BLACK;
+   int _line_detect = 400; 
  //  SoftwareSerial BT; 
  
 };
