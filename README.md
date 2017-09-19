@@ -18,7 +18,9 @@ STEMbot.vn phát triển bộ thư viện Easybot có thể giúp các bạn m�
     EasybotNano Robot; // Một đối tượng robot tên là Robot được tạo ra từ lớp EasybotNano
 ````
 ### Các hàm di chuyển
-
+```
+    Robot.stop(); //dừng robot; 
+```
 ```
     Robot.moveForward(speed); //với speed = 0-100(%) 	điều khiển robot di chuyển đi tới với tốc độ speed (bánh bên phải chạy với tốc độ = speed, bánh trái chạy với tốc độ = speed
 ```
