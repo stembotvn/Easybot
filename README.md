@@ -40,7 +40,7 @@ STEMbot.vn phát triển bộ thư viện Easybot có thể giúp các bạn m�
     Robot.turnLeft(speed,time);// hàm quay trái nâng cao với speed = 0 - 100(%): tham số tốc độ , time = 0 -10 :tham số thời gian-> Quay trái robot với tốc độ = speed trong khoảng thời gian là time x 0.1s
 ```
 ```
-    Robot.turnright(speed,time); // hàm quay phải nâng cao với speed = 0 - 100(%): tham số tốc độ , time = 0 -10 :tham số thời gian-> Quay phải robot với tốc độ = speed trong khoảng thời gian là time x 0.1s 		
+    Robot.turnRight(speed,time); // hàm quay phải nâng cao với speed = 0 - 100(%): tham số tốc độ , time = 0 -10 :tham số thời gian-> Quay phải robot với tốc độ = speed trong khoảng thời gian là time x 0.1s 		
 ```
 ### Các hàm đọc các cảm biến đi theo combo của Wibot (cảm biến dò line và cảm biến siêu âm đo khoảng cách)
 ``` 
