@@ -24,12 +24,13 @@ Chương trình Demo thuật toán dò đường đơn giản
 
 EasybotNano Robot; 
 
- 
+int distance; //tạo một biến để ghi giá trị khoảng cách vật cản trước mặt robot, đơn vị là cm
  
 void setup() {
-Robot.setup_lineSensor(BLACK,400);    //Set up cảm biến dò line nhận line màu đen nền trắng, ngưỡng phát hiện là 400 (dãi : có vạch 900, không vạch 30)
-int distance = Robot.readSonar();  
-while (distance > 10)  
+Serial.begin(9600);  
+distance = Robot.readSonar();   
+
+while (distance > 10)    /// chờ vẫy tay trước mắt robot để khởi động
 {
     Serial.print("READY! Sonar Sensor: "); Serial.println(distance); 
     delay(1000);
@@ -42,16 +43,16 @@ Robot.moveForward(100);
 ///////
 void loop()
 {
- if (Robot.centerSensor() == true) { Robot.moveForward(100);}     
+distance = Robot.readSonar();
+Serial.println(distance); 
+  if (distance < 15) //nếu có vật cản gần hơn 15cm
+    {
+     Robot.turnRight(70,3); // quay trái ở tốc độ 70%, thời gian quay 0.3s
+     distance = Robot.readSonar(); 
+     if (distance < 15) Robot.turnLeft(70,8); //nếu có vật cản gần hơn 15cm thì quay ra sau (tốc độ 70, thời gian quay 8);
+    }
+  else Robot.moveForward(80);  //không có vật cản thì đi thẳng
 
-else if (Robot.leftSensor() == true) {
-Robot.turnLeft(90);
-}
- else if (Robot.rightSensor() == true) {
-  Robot.turnRight(90);
- }
-
-// delay(5);
 
 
 }

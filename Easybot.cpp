@@ -185,7 +185,9 @@ digitalWrite(lineSensor_enable,LOW);
 
 ///////////////////////////////////
 int EasybotNano::readSonar() {
-return (Distance.Ranging(CM));
+  int range = Distance.Ranging(CM);
+  delay(100);
+return range;
     }
  /////////////////////////////////////////////////////////////////////////////////   
 /*
