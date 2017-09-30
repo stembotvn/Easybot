@@ -17,7 +17,11 @@ Chip điều khiển động cơ: L9110S
 Sensor: 3 IR Line detect sensor
         Cảm biến siêu âm đo khoảng cách SRF04
 /////////////////
-Chương trình Demo thuật toán dò đường đơn giản		
+Chương trình Demo thuật toán tránh vật cản:
+1 - Đưa tay trước mặt robot để ra hiệu cho robot khởi động (khoảng cách gần hơn 10cm trước mặt robot)
+2 - Khi không có vật cản trước mặt, Robot đi thằng
+3 - Khi có vật cả trước mặt < 15cm, dừng lại quay robot sang trái 1 góc tương ứng 90, đo lại khoảng cách, 
+nếu vẫn có vật trong phạm vi 15cm thì xoay ngược lại 180 
 ---------------------------------------------------------------------------------------------------------------*/		
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Easybot.h"
