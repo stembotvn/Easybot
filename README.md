@@ -8,9 +8,9 @@ STEMbot.vn phát triển bộ thư viện Easybot có thể giúp các bạn m�
 
 ## Cài Đặt Thư viện
   Download code từ thư mục này theo định dạng .Zip file. 
-  Trên Phần mềm Arduino IDE: chọn Sketch/Include Library/Add Zip Library -> Chọn đường dẫn đến file .Zip vừa tải về. 
-  Khởi động lại Arduino IDE, chọn Tools/Board/Arduino Nano
-  Vào Files/Examples/Easybot để xem code mẫu
+  * Trên Phần mềm Arduino IDE: chọn Sketch/Include Library/Add Zip Library -> Chọn đường dẫn đến file .Zip vừa tải về. 
+  * Khởi động lại Arduino IDE, chọn Tools/Board/Arduino Nano
+  * Vào Files/Examples/Easybot để xem code mẫu
 ## Sử dụng thư viện:
 ### Khởi tạo 
 ```
