@@ -53,7 +53,7 @@ Serial.println(distance);
     {
      Robot.turnRight(70,3); // quay trái ở tốc độ 70%, thời gian quay 0.3s
      distance = Robot.readSonar(); 
-     if (distance < 15) Robot.turnLeft(70,8); //nếu có vật cản gần hơn 15cm thì quay ra sau (tốc độ 70, thời gian quay 8);
+     if (distance < 15) Robot.turnLeft(70,8); //nếu có vật cản gần hơn 15cm thì quay ra sau (tốc độ 70, thời gian quay 0.8s);
     }
   else Robot.moveForward(80);  //không có vật cản thì đi thẳng
 
