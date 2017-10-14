@@ -113,12 +113,12 @@ public:
 	void turnRight(int speed,int time);  //turn to the right, time interval is 100ms <-> const angle
 	void turnLeft(int speed);            //turn robot to the left || Quay robot sang trái
 	void turnLeft(int speed,int time);   //turn to the left, time interval is 100ms <-> const angle
-  void setup_lineSensor(int color, int threshold_detect);
+  	void setup_lineSensor(int color, int threshold_detect);
 	int  readSensor(int channel);        ///Read line sensor with customized channel, return raw value, Channel is LEFTSENSOR, RIGHTSENSOR, CENTERSENSOR
 	bool leftSensor();                   //Read sensor detection, return 1 if detect line, return 0 if not detect line
 	bool rightSensor();                  //Read Right line sensor, return 1 if detect line, return 0 if not detect line
 	bool centerSensor();				 //Read Center line Sensor, return 1 if detect line, return 0 if not detect line
-    int readSonar();            		 ///read the distance || Đọc khoảng cách ex: int khoangcach = robot.readSonar();
+    float readSonar();            		 ///read the distance || Đọc khoảng cách ex: int khoangcach = robot.readSonar();
 
 private:
    EasyMotorL9110 RightMotor;
