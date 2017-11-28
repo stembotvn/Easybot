@@ -17,6 +17,8 @@ STEMbot.vn phát triển bộ thư viện Easybot có thể giúp các bạn m�
 ## Lập trình Scratch với phần mềm mBlock
   Easybot có thể lập trình bằng ngôn ngữ Scratch thay cho Arduino:
   https://github.com/stembotvn/Easybot_mBlock_Extension
+  Tài liệu hướng dẫn học Easybot với ngôn ngữ Scratch:
+  https://github.com/stembotvn/Easybot_mBlock_doccument
 ## Sử dụng thư viện:
 ### Khởi tạo 
 ```
