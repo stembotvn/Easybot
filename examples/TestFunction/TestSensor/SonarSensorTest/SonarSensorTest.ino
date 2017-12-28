@@ -16,15 +16,15 @@ Board mạch: Arduino Nano (chú ý chọn Board: Arduino Nano 328)
 Chip điều khiển động cơ: L9110S
 Sensor: 3 IR Line detect sensor
         Cảm biến siêu âm đo khoảng cách SRF04
-		///////////////////////////////////////////
+    ///////////////////////////////////////////
 Cách sử dụng hàm liên quan Sensor siêu âm SRF04: object.readSonar(); //trả về giá trị khoảng cách phía trước, đơn vị là CM 
   Khai báo thư viện sử dụng: 
   #include <Easybot.h>
   Tạo đối tượng (object) tên là Robot từ lớp EasybotNano: 
-	- EasybotNano Robot; 		
+  - EasybotNano Robot;    
     - Tạo biến chứa giá trị khoảng cách:        int value; 
-	- gán giá trị đọc từ SRF04 vào biến value:  value = Robot.readSonar(); 
-	- In ra màn hình để kiểm tra: 				Serial.println(value); 
+  - gán giá trị đọc từ SRF04 vào biến value:  value = Robot.readSonar(); 
+  - In ra màn hình để kiểm tra:         Serial.println(value); 
 
 
 *----------------------------------------------------------------------------------------------------------------*/
@@ -32,15 +32,25 @@ Cách sử dụng hàm liên quan Sensor siêu âm SRF04: object.readSonar(); //
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Easybot.h"
+#include "LiquidCrystal_I2C.h"
+
 
 EasybotNano Robot; 
+LiquidCrystal_I2C lcd(0x3F, 16, 2);
+
 int value; 
  
  
 void setup() {
 
 Serial.begin(9600);         //
+lcd.begin();
 
+  // Turn on the blacklight and print a message.
+  lcd.backlight();
+  lcd.print("I am Wibot");
+  lcd.setCursor(0,1);
+  lcd.printstr("D = ");
 }
 
 void loop() {
@@ -51,9 +61,13 @@ Serial.println(" Read Distance from Sonar Sensor in Cm ");
 Serial.print("Distance is :");
 
 
+
+
 value = Robot.readSonar();
 Serial.println(value); 
-delay(1000);   
+  lcd.setCursor(6,1);
+  lcd.print(value);lcd.print("  "); 
+delay(500);   
 
 
 
