@@ -8,7 +8,7 @@ Stembot V1.0
    Sensor:  Line following Sensor 3 channels Analog with Enable Pin to active Sensor
    
             Ultra Sonic Range finder sensor SR-04 for detect object
-	HC-06 Bluetooth Interface Via Software Serial
+	HC-06 Bluetooth Interface Via Software Serial, HM10 for BLE 
     NRF24L01 Interface	
    		 
 
