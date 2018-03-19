@@ -33,7 +33,7 @@ Stembot V1.0
 #define lineSensor_enable   A3
 #define leftline_pin2       
 #define rightline_pin2			              			///
-//#define battery_monitor_pin 4     					///
+   					///
 #define SR04_Trig             4							///
 #define SR04_Echo             3							///
 //#define Servo1_pin           11                         ///
@@ -102,7 +102,8 @@ public:
     EasybotNano():  RightMotor(rightMotor_pinA,rightMotor_pinB), LeftMotor(leftMotor_pinA,leftMotor_pinB), Distance(SR04_Trig,SR04_Echo)//, BT(BT_RX_Pin,BT_TX_Pin)
 	 {} //initializer list for objects using within this Class
 
-  //void begin();                          // set Robot Head to Centor, looking to front,   
+  //void begin();       
+    void waitStart(int distance);  //wait for signing in front of Robot with distance             
     void moveForward(int speed);           // move forward function, Hàm chạy thẳng 
     void moveForward(int Leftspeed,int rightspeed);  // move forward with manual adjust Left, Right Wheel Speed || Hàm chạy thẳng với tham số bánh trái và phải tùy chỉnh
     void moveBack(int speed);            //  
@@ -118,7 +119,7 @@ public:
 	bool leftSensor();                   //Read sensor detection, return 1 if detect line, return 0 if not detect line
 	bool rightSensor();                  //Read Right line sensor, return 1 if detect line, return 0 if not detect line
 	bool centerSensor();				 //Read Center line Sensor, return 1 if detect line, return 0 if not detect line
-    float readSonar();            		 ///read the distance || Đọc khoảng cách ex: int khoangcach = robot.readSonar();
+  float readSonar();            		 ///read the distance || Đọc khoảng cách ex: int khoangcach = robot.readSonar();
 
 private:
    EasyMotorL9110 RightMotor;
