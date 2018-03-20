@@ -28,7 +28,7 @@ EasybotNano Robot;
  
 void setup() {
 Robot.setup_lineSensor(BLACK,400);    //Set up cảm biến dò line nhận line màu đen nền trắng, ngưỡng phát hiện là 400 (dãi : có vạch 900, không vạch 30)
-int distance = Robot.readSonar();  
+int distance = Robot.readSonar();    // Phất cờ trước mặt Robot trong tầm 10 cm để khởi động robot
 while (distance > 10)  
 {
     Serial.print("READY! Sonar Sensor: "); Serial.println(distance); 
