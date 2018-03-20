@@ -59,10 +59,10 @@ void moving (char MoveID)
        Robot.moveForward(Speed/2,Speed); //Forward Left
        break;
     case 'I':  
-      Robot.moveForward(Speed,Speed/2);   //Forward Right
+      Robot.moveForward(Speed,Speed/3);   //Forward Right
        break;   
     case 'H':  
-       Robot.moveForward(-Speed/2,-Speed);   //Back Left 
+       Robot.moveForward(-Speed/3,-Speed);   //Back Left 
        break;
     case 'J':  
       Robot.moveForward(-Speed,-Speed/2);   //Back Right
@@ -79,8 +79,8 @@ void moving (char MoveID)
 
     }     //Back Right 
 }
-/////
-void Avoid_obstacle(int speed)
+////////////////////////////////////////////////
+void Avoid_obstacle()
 {
   int distance = Robot.readSonar();
   Serial.println(distance); 
@@ -94,7 +94,7 @@ void Avoid_obstacle(int speed)
       distance = Robot.readSonar(); 
       if (distance < 15) Robot.turnLeft(70,8); //nếu có vật cản gần hơn 15cm thì quay ra sau (tốc độ 70, thời gian quay 0.8s);
     }
-  else Robot.moveForward(speed);  //không có vật cản thì đi thẳng
+  else Robot.moveForward(Speed);  //không có vật cản thì đi thẳng
 
 }
 ///
