@@ -9,7 +9,7 @@
 }*/
 void EasybotNano::waitStart(int distance)
 {
-  While (readSonar()>=distance);
+  while (readSonar()>=distance);
 }
 
 ///////////////////////////////////////
