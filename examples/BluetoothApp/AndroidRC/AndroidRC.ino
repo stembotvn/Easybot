@@ -45,7 +45,7 @@ Robot.setup_lineSensor(BLACK,400);    //Set up cảm biến dò line nhận line
 
 }
 /////
-void moving (char MoveID)
+void moving(char MoveID)
 {
   char dataR = MoveID;
   switch (dataR) { 
@@ -114,10 +114,9 @@ void loop()
 {
 if (BT.available()>0 ) {
   data = BT.read();
-   if (Mode == 0)
-     {
-      moving(data);
-     }
+  Serial.println(data);
+  if (data != 'S')
+  {
   switch (data) { 
     case 'v':  
       Mode = 0;  Robot.stop();
@@ -160,15 +159,37 @@ if (BT.available()>0 ) {
       break;
     case 'q':
       Speed = 100;
-      break;                                   
+      break; 
+   //   case 'S':  
+   //   if (Mode == 0) Robot.stop(); //Mode = 0;    //Stop
+  //     break;
+    case 'F':  
+      Mode = 0;  // Forward
+       break;
+    case 'L':  
+      Mode = 0;
+      break;
+    case 'R':  
+      Mode = 0;
+      break;  
+    case 'B':  
+     Mode = 0;
+      break;  
+                                   
       }
+    }
+  else {
+    if (Mode == 0)  Robot.stop();
+     }  
   }
- 
-  if (Mode == 1) 
+
+  if (Mode == 0) 
+     { moving(data);}
+   else if (Mode == 1) 
     {
     Avoid_obstacle();
     } 
-  else if (Mode ==2)   
+  else if (Mode == 2)   
    {
    Line_following();
    }
