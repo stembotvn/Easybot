@@ -84,7 +84,7 @@ void Avoid_obstacle()
 {
   int distance = Robot.readSonar();
   Serial.println(distance); 
-  if (distance < 15) //nếu có vật cản gần hơn 15cm
+  if (distance < 25) //nếu có vật cản gần hơn 15cm
     {
       Robot.stop();
       delay(100);
@@ -92,7 +92,7 @@ void Avoid_obstacle()
       delay(300);
       Robot.turnRight(70,3); // quay trái ở tốc độ 70%, thời gian quay 0.3s
       distance = Robot.readSonar(); 
-      if (distance < 15) Robot.turnLeft(70,8); //nếu có vật cản gần hơn 15cm thì quay ra sau (tốc độ 70, thời gian quay 0.8s);
+      if (distance < 25) Robot.turnLeft(70,8); //nếu có vật cản gần hơn 15cm thì quay ra sau (tốc độ 70, thời gian quay 0.8s);
     }
   else Robot.moveForward(Speed);  //không có vật cản thì đi thẳng
 
