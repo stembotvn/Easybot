@@ -1,10 +1,8 @@
 # Easybot
 
-Arduino C/C++, Mblock Scratch (đang trong quá trình xây dựng)
-
 Easybot là bộ thư viện viết riêng cho Board EasyControl V1, Core Arduino Nano V3 do STEMbot.vn phát triển
 
-STEMbot.vn phát triển bộ thư viện Easybot có thể giúp các bạn mới làm quen với Arduino và Robot tiếp cận dễ dàng hơn bao giờ hết. Code đơn giản, ngắn gọn để các bạn chỉ tập trung vào thuật toán giải quyết các vấn đề. Các sản phẩm dùng Easybot:
+STEMbot.vn phát triển bộ thư viện Easybot có thể giúp các bạn mới làm quen với Arduino và Robot tiếp cận dễ dàng hơn bao giờ hết, không còn quan tâm đến các phần cứng, và các chương trình con phức tạp. Code đơn giản, ngắn gọn để các bạn chỉ tập trung vào thuật toán giải quyết các vấn đề. Các sản phẩm dùng Easybot:
 
 - Wibot http://stembot.vn/products/wibot
 - RACEbot http://stembot.vn/products/racebot
