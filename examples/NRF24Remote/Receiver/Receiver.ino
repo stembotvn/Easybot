@@ -1,3 +1,5 @@
+
+
 #include "Easybot.h"
 #include <SPI.h>
 #include <nRF24L01.h>
@@ -16,7 +18,7 @@ RF24 radio(CE_PIN, CSN_PIN); // Activate the Radio
 
 /*-----Declaration of Variables -----*/
 
-int joystick[9];  //  Two element array holding the Joystick readings
+int joystick[3];  //  Two element array holding the Joystick readings
 bool done = false;
 bool debug = 1; 
 int x,y,l,r;
@@ -28,8 +30,8 @@ void setup()
   Serial.println("Nrf24L01 Receiver Starting");
   radio.begin();
     radio.setChannel(108);
-    radio.setDataRate(RF24_250KBPS);    // Tốc độ truyền
-  radio.setPALevel(RF24_PA_MIN);
+    radio.setDataRate(RF24_1MBPS);    // Tốc độ truyền
+  radio.setPALevel(RF24_PA_HIGH);
   radio.openReadingPipe(1,pipe);
   radio.startListening();
   l=0;r=0;  //left speed = 0; right speed = 0; 
@@ -45,7 +47,6 @@ void loop()
   //done = false;
    while (radio.available()) {                                   // While there is data ready
         radio.read( joystick, sizeof(joystick));    // Get the payload
-        
         updated = 1; 
        
       }
@@ -56,6 +57,7 @@ void loop()
     //  Serial.println("No radio available");
      // delay(500);
      l=0;r=0;
+    // Robot.stop();
   }
 
      if(updated){
@@ -88,7 +90,7 @@ void loop()
       }
       else if (button==2) 
       {
-        Robot.turnRight(speed);
+        Robot.moveRight(speed);
         Serial.println("Turn Right");
       }
       else if (button==3) 
@@ -98,7 +100,7 @@ void loop()
       }
       else if (button==4) 
       {
-        Robot.turnLeft(speed);
+        Robot.moveLeft(speed);
         Serial.println("Turn Left");
       }
       else if (button==0)
@@ -107,8 +109,6 @@ void loop()
       }
       
       updated = 0;
-      } 
-    else {
-      
-    }  
+    } 
+    
  }

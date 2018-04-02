@@ -11,11 +11,10 @@ Motor Driver: L9110S
 Sensor: IR reflect sensor x 3 for line following 
         Sonar Range Finder sensor:  SRF04
 ---------------------------------------------------------------------------------------------------------------------
--Chương trình mẫu cho bộ phát RF24L01 sử dụng cho Board Joystick Shield gắn với Arduino Uno
+-Chương trình mẫu cho bộ thu RF24L01 sử dụng cho Board Joystick Shield gắn với Arduino Uno
             
 *----------------------------------------------------------------------------------------------------------------*/
 #include <SPI.h>
-
 #include <RF24.h>
 #include <nRF24L01.h>
 #define CE_PIN   9
@@ -32,7 +31,13 @@ byte address[][6] = {"robot"};
 RF24 radio(CE_PIN, CSN_PIN); // Activate  the Radio
 int button=0;
 int joystick[3];  // Two element array holding the Joystick readings
-
+int Val1 = 0;
+int Val2 = 0;
+int old_button = 0; 
+int old_Val1 = 0;
+int old_Val2 = 0;
+bool updated = 0;
+#define Tolerance 5
 void setup()   
 {
    Serial.begin(9600); 
@@ -44,8 +49,8 @@ void setup()
   
   radio.begin();
   radio.setChannel(108);
-  radio.setDataRate(RF24_250KBPS);    // Tốc độ truyền
-  radio.setPALevel(RF24_PA_MIN);
+  radio.setDataRate(RF24_1MBPS);    // Tốc độ truyền
+  radio.setPALevel(RF24_PA_HIGH);
   radio.openWritingPipe(pipe);
   Serial.println("Start");
   delay(1000);
@@ -54,15 +59,35 @@ void setup()
 
 void loop()   
 {
-  joystick[0] = analogRead(JOYSTICK_X); 
-  joystick[1] = analogRead(JOYSTICK_Y); 
+  
+  int Val1 = analogRead(JOYSTICK_X); 
+  int Val2 = analogRead(JOYSTICK_Y); 
+  if (abs(Val1 - old_Val1)> Tolerance) {
+        updated = 1;
+        old_Val1 = Val1;
+        joystick[0] = Val1;}
+   if (abs(Val2- old_Val2)> Tolerance) {
+        updated = 1;
+        old_Val2 = Val2;
+        joystick[1] = Val2;}
   if (!digitalRead(KeyA)) button = 1;
   else if (!digitalRead(KeyB)) button = 2;
-   else if (!digitalRead(KeyC)) button = 3;
-    else if (!digitalRead(KeyD)) button = 4;
-    else if (!digitalRead(KeyE)) button = 5;
-     else button = 0;
+  else if (!digitalRead(KeyC)) button = 3;
+  else if (!digitalRead(KeyD)) button = 4;
+  else if (!digitalRead(KeyE)) button = 5;
+     
+  else button = 0;
+  
+if (button!=old_button)
+{  updated =1; 
    joystick[2]= button;
-   radio.write( joystick, sizeof(joystick) );
-    delay(500);
+   old_button = button; 
+  
+ 
+   // delay(500);
+    }
+if (updated) 
+ {
+   radio.write( joystick, sizeof(joystick) );updated = 0;    
+ }
 }
