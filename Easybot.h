@@ -21,7 +21,7 @@ Stembot V1.0
 
 #include "EasySonar.h"
 #include "EasyMotor.h"
-
+//#include "Pixy.h"
 //#include <Servo.h>
 #include <SoftwareSerial.h>
 ///////////////////////////////////////////////////////////

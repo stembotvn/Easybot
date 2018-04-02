@@ -3,13 +3,13 @@
 #include "Easybot.h"
 
 EasybotNano Robot; 
-Pixy pixy;
+Pixy Camera;
 
 void setup()
 {
   Serial.begin(9600);
   Serial.print("Starting...\n");
-  pixy.init();
+  Camera.init();
 }
 
 void loop()
@@ -20,7 +20,7 @@ void loop()
   char buf[32]; 
   
   // grab blocks!
-  blocks = pixy.getBlocks();
+  blocks = Camera.getBlocks();
   
   // If there are detect blocks, print them!
   if (blocks)
@@ -29,19 +29,19 @@ void loop()
       i++;
       if (i%10==0)
       {
-        if (((pixy.blocks[0].y) <150) && (((pixy.blocks[0].x) > 80) && (pixy.blocks[0].x) < 150))
+        if (((Camera.blocks[0].y) <150) && (((Camera.blocks[0].x) > 80) && (Camera.blocks[0].x) < 150))
         {
           Robot.moveForward(30, 30);
         }
-        else if (((pixy.blocks[0].y) < 150) && ((pixy.blocks[0].x) < 80))
+        else if (((Camera.blocks[0].y) < 150) && ((Camera.blocks[0].x) < 80))
         {
           Robot.moveForward(30,40);
         }
-        else if (((pixy.blocks[0].y) < 150) && ((pixy.blocks[0].x) > 150))
+        else if (((Camera.blocks[0].y) < 150) && ((Camera.blocks[0].x) > 150))
         {
           Robot.moveForward(40,30);
         }
-        else if (((pixy.blocks[0].y) > 150) && (((pixy.blocks[0].x) > 80) && (pixy.blocks[0].x) < 150))
+        else if (((Camera.blocks[0].y) > 150) && (((Camera.blocks[0].x) > 80) && (Camera.blocks[0].x) < 150))
         {
           Robot.moveForward(-30, -30);
         }
