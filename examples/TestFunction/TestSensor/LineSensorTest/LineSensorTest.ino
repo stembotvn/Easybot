@@ -56,28 +56,28 @@ Serial.begin(9600);         //
 ///////
 void loop()
 {
-Serial.println("Reading Line Sensor");
+//Serial.println("Reading Line Sensor");
 //Serial.print("Detect value: ");Serial.println(line_detect);
 
-Serial.print("Left Sensor : ");
+Serial.print("Left : ");
 value = Robot.readSensor(LEFTSENSOR);
 Serial.print(value);  
-Serial.print(" ---Line detect: ");
-Serial.print(Robot.leftSensor());
-Serial.print("------");
+//Serial.print(" ---Line detect: ");
+//Serial.print(Robot.leftSensor());
+Serial.print(" ---");
 
-Serial.print("Center Sensor : ");
+Serial.print("Center : ");
 value = Robot.readSensor(CENTERSENSOR);
 Serial.print(value);  
-Serial.print(" --Line detect: ");
-Serial.print(Robot.centerSensor());
-Serial.print("------");
+//Serial.print(" --Line detect: ");
+//Serial.print(Robot.centerSensor());
+Serial.print(" ---");
 
-Serial.print("Right Sensor : ");
+Serial.print("Right : ");
 value = Robot.readSensor(RIGHTSENSOR);
-Serial.print(value);  
-Serial.print(" --Line detect: ");
-Serial.println(Robot.rightSensor());
+Serial.println(value);  
+//Serial.print(" --Line detect: ");
+//Serial.println(Robot.rightSensor());
 
 
 

@@ -59,14 +59,14 @@ delay(3000);
 Robot.stop();
 delay(200);
 
-Robot.turnLeft(100);
-delay(3000);
-Robot.stop();
-delay(200);
+//Robot.turnLeft(100);
+//delay(3000);
+//Robot.stop();
+//delay(200);
 
-Robot.turnRight(100);
-delay(3000);
-Robot.stop();
-delay(200);
+//Robot.turnRight(100);
+//delay(3000);
+//Robot.stop();
+//delay(200);
 
 }
