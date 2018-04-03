@@ -65,8 +65,8 @@ void setup()
   radio.setChannel(108);
   radio.setDataRate(RF24_1MBPS);    // Tốc độ truyền
   //radio.setAutoAck(0);
-  radio.setPALevel(RF24_PA_LOW);
-  radio.openWritingPipe(pipe);
+ radio.setPALevel(RF24_PA_HIGH);
+   radio.openWritingPipe(pipe);
   Serial.println("Start");
   delay(1000);
 }

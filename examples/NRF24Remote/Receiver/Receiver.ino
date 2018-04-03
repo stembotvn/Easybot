@@ -35,8 +35,8 @@ void setup()
   radio.begin();
     radio.setChannel(108);
     radio.setDataRate(RF24_1MBPS);    // Tốc độ truyền
-  radio.setPALevel(RF24_PA_LOW);
-  //radio.setAutoAck(0);
+ radio.setPALevel(RF24_PA_HIGH);
+   //radio.setAutoAck(0);
   radio.openReadingPipe(1,pipe);
   radio.startListening();
   l=0;r=0;  //left speed = 0; right speed = 0; 
