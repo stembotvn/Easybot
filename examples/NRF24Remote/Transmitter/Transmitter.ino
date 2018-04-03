@@ -53,7 +53,7 @@ void readsensor()
   Serial.print(" --- ");
   Serial.print("Cz = ");
   Serial.println(Cz);
- //delay(500);
+ 
  
 }
 void setup()   

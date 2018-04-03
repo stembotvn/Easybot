@@ -37,13 +37,13 @@ int l = 0;
 int r = 0;
 void readsensor()
 {
-  Cx = analogRead(x); Serial.print("Raw_X = "); Serial.print(Cx);
-  Cy = analogRead(y); Serial.print("__Raw_Y = "); Serial.print(Cy);
-  Cz = analogRead(z); Serial.print("__Raw_Z = "); Serial.println(Cz);
+  Cx = analogRead(x); //Serial.print("Raw_X = "); Serial.print(Cx);
+  Cy = analogRead(y);// Serial.print("__Raw_Y = "); Serial.print(Cy);
+  Cz = analogRead(z);// Serial.print("__Raw_Z = "); Serial.println(Cz);
 
-  Cx = map(Cx, 300, 450 , -100, +100);
-  Cy = map(Cy, 300, 450 , -100, +100);
-  Cz = map(Cz, 300, 450 , -100, +100);
+ // Cx = map(Cx, 300, 450 , -100, +100);
+ // Cy = map(Cy, 300, 450 , -100, +100);
+ // Cz = map(Cz, 300, 450 , -100, +100);
   
   Serial.print("Cx = ");
   Serial.print(Cx);
@@ -53,7 +53,7 @@ void readsensor()
   Serial.print(" --- ");
   Serial.print("Cz = ");
   Serial.println(Cz);
- delay(500);
+ 
  
 }
 void setup()   
@@ -64,8 +64,9 @@ void setup()
   radio.begin();
   radio.setChannel(108);
   radio.setDataRate(RF24_1MBPS);    // Tốc độ truyền
-  radio.setPALevel(RF24_PA_HIGH);
-  radio.openWritingPipe(pipe);
+  //radio.setAutoAck(0);
+ radio.setPALevel(RF24_PA_HIGH);
+   radio.openWritingPipe(pipe);
   Serial.println("Start");
   delay(1000);
 }
@@ -80,7 +81,7 @@ void loop()
   if (data[0]!=old_data[0] || data[1] != old_data[1] || data[2] != old_data[2]) 
      { updated = 1; old_data[0] = data[0];old_data[1]=data[1];old_data[2]=data[2];}
 
-if (updated) 
+//if (updated) 
  {
    radio.write( data, sizeof(data) );updated = 0;    
  }
