@@ -7,11 +7,11 @@
 #define CE_PIN   7
 #define CSN_PIN  8
 
-#define offset 20
-#define Range 60
+#define offset      20   // stop if below value 
+#define Range       80   // Max speed 
+
 EasybotNano Robot; 
 int speed=100;
-
 byte address[1][6] = {"robot"};              // Radio pipe addresses for the 2 nodes to communicate.
 const uint64_t pipe = 0xE8E8F0F0E1LL;
 
@@ -22,10 +22,9 @@ RF24 radio(CE_PIN, CSN_PIN); // Activate the Radio
 /*-----Declaration of Variables -----*/
 
 int data[3];  //  Two element array holding the data readings
-bool done = false;
 bool debug = 1; 
-int x,y,l,r;
-int Cx,Cy,Cz,RCx,RCy,RCz;
+int l,r;
+int Cx,Cy,Cz;
 bool updated = 0;
 void setup()  
 {
@@ -57,54 +56,31 @@ void loop()
       }
    Serial.println("updated");    
   }
-  else
-  {    
-    //  Serial.println("No radio available");
-     // delay(500);
-    // l=0;r=0;
-    // Robot.stop();
-  }
+  
+  if(updated){
+     Cx = data[0];
+     Cy = data[1];
+     Cz = data[2];
+     Serial.print(Cx);Serial.print(",");Serial.println(Cy);
 
-     if(updated){
-     RCx = data[0];
-     RCy = data[1];
-     RCz = data[2];
-   //  Serial.print(RCx);Serial.print(",");Serial.println(RCy);Serial.print(",");
-   /*  Serial.print("CX = ");
-      Serial.print(Cx);
-     Serial.print(" CY = ");      
-     Serial.println(Cy);*/
-     
-     Cx = map(RCx, 260, 400 , +60, -60);
-     Cy = map(RCy, 260, 400 , +60, -60);
-    Cz = map(RCz, 260, 450 , -100, +100);
+    
       l = Cy+Cx; r = Cy-Cx; 
       if (l>Range) l = Range; 
       else if (l<-Range) l = -Range;
       if (r>Range) r = Range;
       else if (r<-Range) r=-Range; 
-      if(debug){
-     /* Serial.print("X = ");
-      Serial.print(Cx);
-      Serial.print(" Y = ");      
-      Serial.print(Cy);
-      Serial.print("     L = ");
-      Serial.print(l);
-      Serial.print(" R = ");
-      Serial.println(r);*/
-      Serial.print(Cx);Serial.print(",");Serial.println(Cy);
-      }
+     
       if((Cy<offset && Cy >-offset) && (Cx <offset && Cx >-offset))
           {
             Robot.stop();
           }
       else   Robot.moveForward(l,r);
-    
+      updated = 0;
       }
       
       
       
-      updated = 0;
+      
    
     
  }

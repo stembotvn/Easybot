@@ -22,6 +22,9 @@ Sensor: IR reflect sensor x 3 for line following
 #define x A2
 #define y A1
 #define z A0
+
+#define Maxspeed    80
+
 const uint64_t pipe = 0xE8E8F0F0E1LL;
 byte address[][6] = {"robot"};      
 RF24 radio(CE_PIN, CSN_PIN); // Activate  the Radio
@@ -30,21 +33,30 @@ int old_button=0;
 int data[3];  // Two element array holding the Joystick readings
 int old_data[3];
 bool updated = 0;
-int Cx;
-int Cy;
-int Cz;
+int Cx,Cy,Cz,RCx,RCy,RCz;
+
 int l = 0;
 int r = 0;
+int Calib_Max =400;
+int Calib_Zero = 330 ;
+int Calib_Min = 2*Calib_Zero - Calib_Max;
+
+
 void readsensor()
 {
-  Cx = analogRead(x); //Serial.print("Raw_X = "); Serial.print(Cx);
-  Cy = analogRead(y);// Serial.print("__Raw_Y = "); Serial.print(Cy);
-  Cz = analogRead(z);// Serial.print("__Raw_Z = "); Serial.println(Cz);
+  RCx = analogRead(x); //Serial.print("Raw_X = "); Serial.print(Cx);
+  RCy = analogRead(y);// Serial.print("__Raw_Y = "); Serial.print(Cy);
+  RCz = analogRead(z);// Serial.print("__Raw_Z = "); Serial.println(Cz);
 
- // Cx = map(Cx, 300, 450 , -100, +100);
- // Cy = map(Cy, 300, 450 , -100, +100);
- // Cz = map(Cz, 300, 450 , -100, +100);
-  
+   Cx = map(RCx, Calib_Min, Calib_Max , -Maxspeed, +Maxspeed);
+   Cy = map(RCy, Calib_Min, Calib_Max , -Maxspeed, +Maxspeed);
+     // Cz = map(RCz, Calib_Min, Calib_Max , +Maxspeed, -Maxspeed);
+
+  //Plotting Data to Graphic 
+  //Serial.print(RCx);Serial.print(",");Serial.println(RCy);Serial.print(",");
+   Serial.print(Cx);Serial.print(",");Serial.println(Cy);
+
+/*  
   Serial.print("Cx = ");
   Serial.print(Cx);
   Serial.print(" --- ");
@@ -53,6 +65,7 @@ void readsensor()
   Serial.print(" --- ");
   Serial.print("Cz = ");
   Serial.println(Cz);
+  */
  
  
 }
@@ -64,8 +77,7 @@ void setup()
   radio.begin();
   radio.setChannel(108);
   radio.setDataRate(RF24_1MBPS);    // Tốc độ truyền
-  //radio.setAutoAck(0);
- radio.setPALevel(RF24_PA_HIGH);
+  radio.setPALevel(RF24_PA_HIGH);
    radio.openWritingPipe(pipe);
   Serial.println("Start");
   delay(1000);
