@@ -6,9 +6,6 @@
 #include <RF24.h>
 #define CE_PIN   7
 #define CSN_PIN  8
-
-#define offset 20
-#define Range 60
 EasybotNano Robot; 
 int speed=100;
 
@@ -25,7 +22,7 @@ int data[3];  //  Two element array holding the data readings
 bool done = false;
 bool debug = 1; 
 int x,y,l,r;
-int Cx,Cy,Cz,RCx,RCy,RCz;
+int Cx,Cy,Cz;
 bool updated = 0;
 void setup()  
 {
@@ -35,8 +32,7 @@ void setup()
   radio.begin();
     radio.setChannel(108);
     radio.setDataRate(RF24_1MBPS);    // Tốc độ truyền
-  radio.setPALevel(RF24_PA_LOW);
-  //radio.setAutoAck(0);
+  radio.setPALevel(RF24_PA_HIGH);
   radio.openReadingPipe(1,pipe);
   radio.startListening();
   l=0;r=0;  //left speed = 0; right speed = 0; 
@@ -66,42 +62,27 @@ void loop()
   }
 
      if(updated){
-     RCx = data[0];
-     RCy = data[1];
-     RCz = data[2];
-   //  Serial.print(RCx);Serial.print(",");Serial.println(RCy);Serial.print(",");
-   /*  Serial.print("CX = ");
-      Serial.print(Cx);
-     Serial.print(" CY = ");      
-     Serial.println(Cy);*/
+     Cx = data[0];
+     Cy = data[1];
+     Cz = data[2];
      
-     Cx = map(RCx, 260, 400 , +60, -60);
-     Cy = map(RCy, 260, 400 , +60, -60);
-    Cz = map(RCz, 260, 450 , -100, +100);
-      l = Cy+Cx; r = Cy-Cx; 
-      if (l>Range) l = Range; 
-      else if (l<-Range) l = -Range;
-      if (r>Range) r = Range;
-      else if (r<-Range) r=-Range; 
+      l = Cy+Cx; r = Cx-Cy; 
+      if (l>100) l = 100; 
+      else if (l<-100) l = -100;
+      if (r>100) r = 100;
+      else if (r<-100) r=-100; 
       if(debug){
-     /* Serial.print("X = ");
+      Serial.print("X = ");
       Serial.print(Cx);
       Serial.print(" Y = ");      
       Serial.print(Cy);
       Serial.print("     L = ");
       Serial.print(l);
       Serial.print(" R = ");
-      Serial.println(r);*/
-      Serial.print(Cx);Serial.print(",");Serial.println(Cy);
+      Serial.println(r);
       }
-      if((Cy<offset && Cy >-offset) && (Cx <offset && Cx >-offset))
-          {
-            Robot.stop();
-          }
-      else   Robot.moveForward(l,r);
-    
+  //    Robot.moveForward(l,r);
       }
-      
       
       
       updated = 0;
