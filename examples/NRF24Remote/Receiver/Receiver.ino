@@ -1,14 +1,12 @@
-
-
+/*
+Chương trình Demo Điều khiển từ xa cho Robot Easybot từ Joystick Shield Uno, chương trình viết bên nhận là Robot dòng Easybot.
+*/
 #include "Easybot.h"
 #include <SPI.h>
 #include <nRF24L01.h>
 #include <RF24.h>
 #define CE_PIN   7
 #define CSN_PIN  8
-
-#define offset 20
-#define Range 60
 EasybotNano Robot; 
 int speed=100;
 
@@ -21,11 +19,10 @@ RF24 radio(CE_PIN, CSN_PIN); // Activate the Radio
 
 /*-----Declaration of Variables -----*/
 
-int data[3];  //  Two element array holding the data readings
+int joystick[9];  //  Two element array holding the Joystick readings
 bool done = false;
 bool debug = 1; 
 int x,y,l,r;
-int Cx,Cy,Cz,RCx,RCy,RCz;
 bool updated = 0;
 void setup()  
 {
@@ -35,8 +32,7 @@ void setup()
   radio.begin();
     radio.setChannel(108);
     radio.setDataRate(RF24_1MBPS);    // Tốc độ truyền
- radio.setPALevel(RF24_PA_HIGH);
-   //radio.setAutoAck(0);
+  radio.setPALevel(RF24_PA_MAX);
   radio.openReadingPipe(1,pipe);
   radio.startListening();
   l=0;r=0;  //left speed = 0; right speed = 0; 
@@ -51,7 +47,8 @@ void loop()
     // Reading the data payload until the RX received everything
   //done = false;
    while (radio.available()) {                                   // While there is data ready
-        radio.read( data, sizeof(data));    // Get the payload
+        radio.read( joystick, sizeof(joystick));    // Get the payload
+        
         updated = 1; 
        
       }
@@ -61,50 +58,60 @@ void loop()
   {    
     //  Serial.println("No radio available");
      // delay(500);
-    // l=0;r=0;
-    // Robot.stop();
+     l=0;r=0;
   }
 
      if(updated){
-     RCx = data[0];
-     RCy = data[1];
-     RCz = data[2];
-   //  Serial.print(RCx);Serial.print(",");Serial.println(RCy);Serial.print(",");
-   /*  Serial.print("CX = ");
-      Serial.print(Cx);
-     Serial.print(" CY = ");      
-     Serial.println(Cy);*/
-     
-     Cx = map(RCx, 260, 400 , +60, -60);
-     Cy = map(RCy, 260, 400 , +60, -60);
-    Cz = map(RCz, 260, 450 , -100, +100);
-      l = Cy+Cx; r = Cy-Cx; 
-      if (l>Range) l = Range; 
-      else if (l<-Range) l = -Range;
-      if (r>Range) r = Range;
-      else if (r<-Range) r=-Range; 
+      int button=joystick[2];
+      if (button==5)
+      {
+        x = map(joystick[0],0,670,-100,+100);
+        y = map(joystick[1],0,670,-100,+100);
+      l = y+x; r = y-x; 
+      if (l>100) l = 100; 
+      else if (l<-100) l = -100;
+      if (r>100) r = 100;
+      else if (r<-100) r=-100; 
       if(debug){
-     /* Serial.print("X = ");
-      Serial.print(Cx);
+      Serial.print("X = ");
+      Serial.print(x);
       Serial.print(" Y = ");      
-      Serial.print(Cy);
+      Serial.print(y);
       Serial.print("     L = ");
       Serial.print(l);
       Serial.print(" R = ");
-      Serial.println(r);*/
-      Serial.print(Cx);Serial.print(",");Serial.println(Cy);
+      Serial.println(r);
       }
-      if((Cy<offset && Cy >-offset) && (Cx <offset && Cx >-offset))
-          {
-            Robot.stop();
-          }
-      else   Robot.moveForward(l,r);
-    
+      Robot.moveForward(l,r);
       }
-      
-      
+      else if (button==1) 
+      {
+        Robot.moveForward(speed);
+        Serial.println("Up");
+      }
+      else if (button==2) 
+      {
+        Robot.turnRight(speed);
+        Serial.println("Turn Right");
+      }
+      else if (button==3) 
+      {
+        Robot.moveBack(speed);
+        Serial.println("Down");
+      }
+      else if (button==4) 
+      {
+        Robot.turnLeft(speed);
+        Serial.println("Turn Left");
+      }
+      else if (button==0)
+      {
+        Robot.stop();
+      }
       
       updated = 0;
-   
-    
+      } 
+    else {
+      
+    }  
  }
