@@ -49,7 +49,7 @@ void readsensor()
   RCz = analogRead(z);// Serial.print("__Raw_Z = "); Serial.println(Cz);
 
    Cx = map(RCx, Calib_Min, Calib_Max , -Maxspeed, +Maxspeed);
-   Cy = map(RCy, Calib_Min, Calib_Max , -Maxspeed, +Maxspeed);
+   Cy = map(RCy, Calib_Min, Calib_Max , +Maxspeed, -Maxspeed);
      // Cz = map(RCz, Calib_Min, Calib_Max , +Maxspeed, -Maxspeed);
 
   //Plotting Data to Graphic 
