@@ -32,8 +32,8 @@ byte address[2][6] = {"robot1","robot2"};
 RF24 radio(CE_PIN, CSN_PIN); // Activate  the Radio
 int button=0;
 int old_button=0;
-int data[3];  // Two element array holding the Joystick readings
-int old_data[3];
+int data[4];  // Two element array holding the Joystick readings
+int old_data[4];
 bool updated = 0;
 int Cx,Cy,Cz,RCx,RCy,RCz;
 
@@ -41,6 +41,8 @@ int l = 0;
 int r = 0;
 int Calib_Max =400;
 int Calib_Zero = 330 ;
+//int Calib_Max =400;
+//int Calib_Zero = 330 ;
 int Calib_Min = 2*Calib_Zero - Calib_Max;
 
 
@@ -49,19 +51,26 @@ void readsensor()
   RCx = analogRead(x); //Serial.print("Raw_X = "); Serial.print(Cx);
   RCy = analogRead(y);// Serial.print("__Raw_Y = "); Serial.print(Cy);
   RCz = analogRead(z);// Serial.print("__Raw_Z = "); Serial.println(Cz);
-   Cx = map(RCx, Calib_Min, Calib_Max , -Maxspeed, +Maxspeed);
-   Cy = map(RCy, Calib_Min, Calib_Max , +Maxspeed, -Maxspeed);
-     // Cz = map(RCz, Calib_Min, Calib_Max , +Maxspeed, -Maxspeed);
-  if (!digitalRead(debug_EN)) {
-    Serial.print("Raw_X = "); Serial.print(Cx);
-    Serial.print("__Raw_Y = "); Serial.print(Cy);
-    Serial.print("__Raw_Z = "); Serial.println(Cz);
-    delay(1000);
+ if (!digitalRead(debug_EN))
+ {
+    Serial.print("Raw_X = "); Serial.print(RCx);
+    Serial.print("__Raw_Y = "); Serial.print(RCy);
+    Serial.print("__Raw_Z = "); Serial.println(RCz);
+    
   }
-
+   Cx = map(RCx, Calib_Min, Calib_Max , -Maxspeed, +Maxspeed);
+   Cy = map(RCz, Calib_Min, Calib_Max , +Maxspeed, -Maxspeed);
+     // Cz = map(RCz, Calib_Min, Calib_Max , +Maxspeed, -Maxspeed);
+  if (!digitalRead(debug_EN)) 
+  
+{
+    Serial.print(Cx);Serial.print(",");Serial.println(Cy);
+    
+  }
+ //delay(1000);
   //Plotting Data to Graphic 
   //Serial.print(RCx);Serial.print(",");Serial.println(RCy);Serial.print(",");
-   Serial.print(Cx);Serial.print(",");Serial.println(Cy);
+  
 
 /*  
   Serial.print("Cx = ");
@@ -97,6 +106,7 @@ void loop()
   data[0] = Cx;
   data[1] = Cy;
   data[2] = Cz;
+  data[3] = 127; //for test transmitter
 //  if (data[0]!=old_data[0] || data[1] != old_data[1] || data[2] != old_data[2]) 
 //     { updated = 1; old_data[0] = data[0];old_data[1]=data[1];old_data[2]=data[2];}
 
@@ -104,8 +114,10 @@ void loop()
  {
    if (radio.write( data, sizeof(data) )) Serial.println("Data sent!");
    else Serial.println("Fail!");
-
-
+ /*  radio.write(data,sizeof(data)); 
+   bool ok = radio.txStandBy();
+   if (ok) Serial.println("Data sent!");
+   else Serial.println("Fail!");*/
   //  ;updated = 0;    
  }
 }
