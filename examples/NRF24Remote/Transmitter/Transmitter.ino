@@ -64,5 +64,5 @@ void loop()
      else button = 0;
    joystick[2]= button;
    radio.write( joystick, sizeof(joystick) );
-
+   delay(50);
 }
