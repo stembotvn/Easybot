@@ -30,8 +30,8 @@ Sensor: IR reflect sensor x 3 for line following
 #define MinAngle    -100
 
 //const uint64_t pipe = 0xE8E8F0F0E1LL; // Xe Test
-const uint64_t pipe = 0xE8E8F0F0BBLL; // Xe Xanh
-//const uint64_t pipe = 0xE8E8F0F0CCLL; //Xe Do
+//const uint64_t pipe = 0xE8E8F0F0BBLL; // Xe Xanh
+const uint64_t pipe = 0xE8E8F0F0CCLL; //Xe Do
 byte address[2][6] = {"robot1","robot2"};      
 RF24 radio(CE_PIN, CSN_PIN); // Activate  the Radio
 int button=0;
@@ -70,16 +70,16 @@ void readsensor()
     
   }
   // Cx = map(RCx, Calib_Min, Calib_Max , -Maxspeed, +Maxspeed);
-  // Cy = map(RCz, Calib_Min, Calib_Max , +Maxspeed, -Maxspeed);
-     // Cz = map(RCz, Calib_Min, Calib_Max , +Maxspeed, -Maxspeed);
+     Cy = map(RCz, Calib_Min, Calib_Max , +Maxspeed, -Maxspeed);
+      Cz = map(RCz, Calib_Min, Calib_Max , 100, -100);
     Cx = map(RCx, Calib_Min, Calib_Max , -MaxAngle, +MaxAngle);
-    throttle = map(Rthrottle, min_pot, max_pot , -MaxAngle, +MaxAngle); 
+    throttle = map(Rthrottle, 0, 1023 , 0, 100); 
 
   if (!digitalRead(debug_EN)) 
   
 {
    // Serial.print(Cx);Serial.print(",");Serial.println(Cy);
-    Serial.print(Cx);Serial.print(",");Serial.println(throttle);
+    Serial.print(Cx);Serial.print(",");Serial.print(Cz);Serial.print(",");Serial.println(throttle);
   }
 if (!digitalRead(debug_EN))  delay(1000);
   //Plotting Data to Graphic 

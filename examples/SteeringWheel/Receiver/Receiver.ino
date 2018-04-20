@@ -81,18 +81,18 @@ void loop()
       else   Robot.moveForward(l,r); */ 
      if (Cx<-20) 
      {
-     l = (100 + Cx)*throttle/100; r = throttle;
+     l = (100 + Cx*2)*throttle/100; r = throttle;
       }
     else if (Cx>20)
     {
-     r = (100 - Cx)*throttle/100; l = throttle;
+     r = (100 - Cx*2)*throttle/100; l = throttle;
     }
     else {r = throttle;l=throttle;}
-    if (throttle > -offset && throttle < offset) { l =0; r = 0;}
-
+    if (throttle < offset) { l =0; r = 0;}
+    
      Serial.print("L = ");Serial.print(l);  Serial.print("   R = ");Serial.println(r);
-
-     Robot.moveForward(l,r);
+     if(Cz >0)      Robot.moveForward(l,r);
+     else if (Cz <-20) Robot.moveForward(-l,-r);
    
       updated = 0;
       }
