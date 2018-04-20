@@ -8,13 +8,14 @@
 #define CSN_PIN  8
 
 #define offset      20   // stop if below value 
-#define Range       80   // Max speed 
+#define Range       100   // Max speed 
 
 EasybotNano Robot; 
 int speed=100;
 byte address[1][6] = {"robot"};              // Radio pipe addresses for the 2 nodes to communicate.
-const uint64_t pipe = 0xE8E8F0F0E1LL;
-
+//const uint64_t pipe = 0xE8E8F0F0E1LL; // Xe Test
+//const uint64_t pipe = 0xE8E8F0F0BBLL; // Xe Xanh
+const uint64_t pipe = 0xE8E8F0F0CCLL; //Xe Do
 /*-----Object Declaration ----*/
 
 RF24 radio(CE_PIN, CSN_PIN); // Activate the Radio
@@ -25,6 +26,7 @@ int data[4];  //  Two element array holding the data readings
 bool debug = 1; 
 int l,r;
 int Cx,Cy,Cz;
+int throttle; 
 bool updated = 0;
 void setup()  
 {
@@ -54,17 +56,18 @@ void loop()
         updated = 1; 
        
       }
-   Serial.println("updated"); 
-   Serial.println(data[3]);   
+   //Serial.println("updated"); 
+  // Serial.println(data[3]);   
   }
   
   if(updated){
      Cx = data[0];
      Cy = data[1];
      Cz = data[2];
-     Serial.print(Cx);Serial.print(",");Serial.println(Cy);
-
-    
+     throttle = data[3];
+     Serial.print(Cx);Serial.print(",");Serial.println(throttle);
+     
+    /*
       l = Cy+Cx; r = Cy-Cx; 
       if (l>Range) l = Range; 
       else if (l<-Range) l = -Range;
@@ -75,7 +78,22 @@ void loop()
           {
             Robot.stop();
           }
-      else   Robot.moveForward(l,r);
+      else   Robot.moveForward(l,r); */ 
+     if (Cx<-20) 
+     {
+     l = (100 + Cx)*throttle/100; r = throttle;
+      }
+    else if (Cx>20)
+    {
+     r = (100 - Cx)*throttle/100; l = throttle;
+    }
+    else {r = throttle;l=throttle;}
+    if (throttle > -offset && throttle < offset) { l =0; r = 0;}
+
+     Serial.print("L = ");Serial.print(l);  Serial.print("   R = ");Serial.println(r);
+
+     Robot.moveForward(l,r);
+   
       updated = 0;
       }
       
