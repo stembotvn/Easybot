@@ -66,19 +66,7 @@ void loop()
      Cz = data[2];
      throttle = data[3];
      Serial.print(Cx);Serial.print(",");Serial.println(throttle);
-     
-    /*
-      l = Cy+Cx; r = Cy-Cx; 
-      if (l>Range) l = Range; 
-      else if (l<-Range) l = -Range;
-      if (r>Range) r = Range;
-      else if (r<-Range) r=-Range; 
-     
-      if((Cy<offset && Cy >-offset) && (Cx <offset && Cx >-offset))
-          {
-            Robot.stop();
-          }
-      else   Robot.moveForward(l,r); */ 
+    
      if (Cx<-20) 
      {
      l = (100 + Cx*2)*throttle/100; r = throttle;
