@@ -13,7 +13,9 @@
 EasybotNano Robot; 
 int speed=100;
 byte address[1][6] = {"robot"};              // Radio pipe addresses for the 2 nodes to communicate.
-const uint64_t pipe = 0xE8E8F0F0E1LL;
+//const uint64_t pipe = 0xE8E8F0F0E1LL;
+//const uint64_t pipe = 0xE8E8F0F0BBLL;  // robot do 
+const uint64_t pipe = 0xE8E8F0F0CCLL;  // robot xanh
 
 /*-----Object Declaration ----*/
 
@@ -32,7 +34,7 @@ void setup()
 
   Serial.println("Nrf24L01 Receiver Starting");
   radio.begin();
-    radio.setChannel(108);
+    radio.setChannel(120);
     radio.setDataRate(RF24_1MBPS);    // Tốc độ truyền
  radio.setPALevel(RF24_PA_HIGH);
    //radio.setAutoAck(0);

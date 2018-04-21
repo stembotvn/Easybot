@@ -24,10 +24,13 @@ Sensor: IR reflect sensor x 3 for line following
 #define z A0
 #define debug_EN 2
 #define Maxspeed    80
-
-const uint64_t pipe = 0xE8E8F0F0E1LL;
-//const uint64_t pipe = 0xE8E8F0F0BBLL;
-//const uint64_t pipe = 0xE8E8F0F0CCLL;
+#define RED 
+//const uint64_t pipe = 0xE8E8F0F0E1LL;
+//const uint64_t pipe = 0xE8E8F0F0BBLL;  // robot do 
+#ifndef RED
+const uint64_t pipe = 0xE8E8F0F0CCLL;  // robot xanh
+#else const uint64_t pipe = 0xE8E8F0F0BBLL;  // robot do 
+#endif
 byte address[2][6] = {"robot1","robot2"};      
 RF24 radio(CE_PIN, CSN_PIN); // Activate  the Radio
 int button=0;
@@ -91,7 +94,11 @@ void setup()
 
   pinMode(debug_EN,INPUT_PULLUP);
   radio.begin();
-  radio.setChannel(108);
+  #ifndef RED
+  radio.setChannel(120);
+  #else   radio.setChannel(108);
+  #endif 
+
   radio.setDataRate(RF24_1MBPS);    // Tốc độ truyền
   radio.setPALevel(RF24_PA_HIGH);
    radio.openWritingPipe(pipe);
