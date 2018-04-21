@@ -1,5 +1,3 @@
-
-
 #include "Easybot.h"
 #include <SPI.h>
 #include <nRF24L01.h>
@@ -7,7 +5,7 @@
 #define CE_PIN   7
 #define CSN_PIN  8
 
-#define offset      20   // stop if below value 
+#define offset      5   // stop if below value 
 #define Range       100   // Max speed 
 
 EasybotNano Robot; 
@@ -67,27 +65,22 @@ void loop()
      throttle = data[3];
      Serial.print(Cx);Serial.print(",");Serial.println(throttle);
     
-     if (Cx<-20) 
+     if (Cx<-10) 
      {
-     l = (100 + Cx*2)*throttle/100; r = throttle;
+     l = (100 + Cx*1.0)*throttle/100; r = throttle;
       }
-    else if (Cx>20)
+    else if (Cx>10)
     {
-     r = (100 - Cx*2)*throttle/100; l = throttle;
-    }
+     r = (100 - Cx*1.0)*throttle/100; l = throttle;    }
     else {r = throttle;l=throttle;}
-    if (throttle < offset) { l =0; r = 0;}
+    if (throttle < offset) {l =0; r = 0;} //
     
      Serial.print("L = ");Serial.print(l);  Serial.print("   R = ");Serial.println(r);
      if(Cz >0)      Robot.moveForward(l,r);
-     else if (Cz <-20) Robot.moveForward(-l,-r);
+     else if (Cz <-40) Robot.moveForward(-r,-l);
    
       updated = 0;
-      }
-      
-      
-      
-      
+      }           
    
     
  }
