@@ -32,8 +32,8 @@ void setup()
 
   Serial.println("Nrf24L01 Receiver Starting");
   radio.begin();
-    radio.setChannel(108);
-    radio.setDataRate(RF24_1MBPS);    // Tốc độ truyền
+  radio.setChannel(108);
+  radio.setDataRate(RF24_1MBPS);    // Tốc độ truyền
  radio.setPALevel(RF24_PA_HIGH);
    //radio.setAutoAck(0);
   radio.openReadingPipe(1,pipe);
@@ -67,17 +67,17 @@ void loop()
     
      if (Cx<-10) 
      {
-     l = (100 + Cx*1.0)*throttle/100; r = throttle;
+     l = (100 + Cx*(1+70/throttle))*throttle/100; r = throttle;
       }
     else if (Cx>10)
     {
-     r = (100 - Cx*1.0)*throttle/100; l = throttle;    }
+     r = (100 - Cx*(1+70/throttle))*throttle/100; l = throttle;    }
     else {r = throttle;l=throttle;}
     if (throttle < offset) {l =0; r = 0;} //
     
      Serial.print("L = ");Serial.print(l);  Serial.print("   R = ");Serial.println(r);
      if(Cz >0)      Robot.moveForward(l,r);
-     else if (Cz <-40) Robot.moveForward(-r,-l);
+     else if (Cz <-50) Robot.moveForward(-r*0.7,-l*0.7);
    
       updated = 0;
       }           

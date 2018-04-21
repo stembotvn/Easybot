@@ -29,9 +29,9 @@ Sensor: IR reflect sensor x 3 for line following
 #define MaxAngle    100// 
 #define MinAngle    -100
 
-//const uint64_t pipe = 0xE8E8F0F0E1LL; // Xe Test
+const uint64_t pipe = 0xE8E8F0F0E1LL; // Xe Test
 //const uint64_t pipe = 0xE8E8F0F0BBLL; // Xe Xanh
-const uint64_t pipe = 0xE8E8F0F0CCLL; //Xe Do
+//const uint64_t pipe = 0xE8E8F0F0CCLL; //Xe Do
 byte address[2][6] = {"robot1","robot2"};      
 RF24 radio(CE_PIN, CSN_PIN); // Activate  the Radio
 int button=0;
@@ -105,7 +105,7 @@ void setup()
 
   pinMode(debug_EN,INPUT_PULLUP);
   radio.begin();
-  radio.setChannel(108);
+  radio.setChannel(120);
   radio.setDataRate(RF24_1MBPS);    // Tốc độ truyền
   radio.setPALevel(RF24_PA_HIGH);
    radio.openWritingPipe(pipe);
