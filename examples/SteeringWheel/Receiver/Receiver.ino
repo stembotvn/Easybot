@@ -16,7 +16,7 @@ byte address[1][6] = {"robot"};              // Radio pipe addresses for the 2 n
 const uint64_t pipe = 0xE8E8F0F0CCLL; //Xe Do
 /*-----Object Declaration ----*/
 
-RF24 radio(CE_PIN, CSN_PIN); // Activate the Radio
+RF24 radio(CE_PIN, CSN_PIN); // Activate the Radio  //
 
 /*-----Declaration of Variables -----*/
 
@@ -67,11 +67,11 @@ void loop()
     
      if (Cx<-10) 
      {
-     l = (100 + Cx*(1+70/throttle))*throttle/100; r = throttle;
+     l = (100 + Cx*(1+ throttle/100))*throttle/100; r = throttle;
       }
     else if (Cx>10)
     {
-     r = (100 - Cx*(1+70/throttle))*throttle/100; l = throttle;    }
+     r = (100 - Cx*(1+ throttle/100))*throttle/100; l = throttle;    }
     else {r = throttle;l=throttle;}
     if (throttle < offset) {l =0; r = 0;} //
     
