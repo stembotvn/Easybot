@@ -21,9 +21,8 @@ Stembot V1.0
 
 #include "EasySonar.h"
 #include "EasyMotor.h"
-//#include "Pixy.h"
-//#include <Servo.h>
-//#include <SoftwareSerial.h>
+#include "ServoTimer2.h"
+#include <SoftwareSerial.h>
 ///////////////////////////////////////////////////////////
 ////define for I/O Pins////////////////////////////////////
 #define _EasybotIO										///
@@ -89,7 +88,7 @@ Stembot V1.0
 // #define BT                    SoftSerial
  #define BT_Tx_Pin 7               
  #define BT_Rx_Pin 8
- 
+ #define Servo_Pin 2
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,7 +101,7 @@ public:
     EasybotNano():  RightMotor(rightMotor_pinA,rightMotor_pinB), LeftMotor(leftMotor_pinA,leftMotor_pinB), Distance(SR04_Trig,SR04_Echo)//, BT(BT_RX_Pin,BT_TX_Pin)
 	 {} //initializer list for objects using within this Class
 
-  //void begin();       
+    //void begin();       
     void waitStart(int distance);  //wait for signing in front of Robot with distance             
     void moveForward(int speed);           // move forward function, Hàm chạy thẳng 
     void moveForward(int Leftspeed,int rightspeed);  // move forward with manual adjust Left, Right Wheel Speed || Hàm chạy thẳng với tham số bánh trái và phải tùy chỉnh
@@ -120,11 +119,13 @@ public:
 	bool rightSensor();                  //Read Right line sensor, return 1 if detect line, return 0 if not detect line
 	bool centerSensor();				 //Read Center line Sensor, return 1 if detect line, return 0 if not detect line
   float readSonar();            		 ///read the distance || Đọc khoảng cách ex: int khoangcach = robot.readSonar();
-
+  void setServo(int angle);
+  void disableServo() {servo.detach();}
 private:
    EasyMotorL9110 RightMotor;
    EasyMotorL9110 LeftMotor;
    EasySonar Distance;
+   ServoTimer2 servo;
    int _LINE_COLOR = BLACK;
    int _line_detect = 400; 
  //  SoftwareSerial BT; 

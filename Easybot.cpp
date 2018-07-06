@@ -7,10 +7,7 @@
 /*void EasybotNano::begin(){
  
 }*/
-void EasybotNano::waitStart(int distance)
-{
-  while (readSonar()>=distance);
-}
+
 
 ///////////////////////////////////////
 void EasybotNano::moveForward(int speed){
@@ -193,7 +190,12 @@ float EasybotNano::readSonar() {
   delay(100);
 return range;
     }
- /////////////////////////////////////////////////////////////////////////////////   
+void EasybotNano::setServo(int Angle)
+{
+// if (!servo.attached) 
+  servo.attach(Servo_Pin);
+ servo.write(Angle);
+}
 /*
  //////////////////////////////////
  
