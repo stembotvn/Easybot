@@ -23,7 +23,7 @@ Stembot V1.0
 #include "EasyMotor.h"
 //#include "Pixy.h"
 //#include <Servo.h>
-#include <SoftwareSerial.h>
+//#include <SoftwareSerial.h>
 ///////////////////////////////////////////////////////////
 ////define for I/O Pins////////////////////////////////////
 #define _EasybotIO										///
