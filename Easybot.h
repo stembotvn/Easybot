@@ -102,7 +102,7 @@ public:
 	 {} //initializer list for objects using within this Class
 
     //void begin();       
-    void waitStart(int distance);  //wait for signing in front of Robot with distance             
+    //void waitStart(int distance);  //wait for signing in front of Robot with distance             
     void moveForward(int speed);           // move forward function, Hàm chạy thẳng 
     void moveForward(int Leftspeed,int rightspeed);  // move forward with manual adjust Left, Right Wheel Speed || Hàm chạy thẳng với tham số bánh trái và phải tùy chỉnh
     void moveBack(int speed);            //  
