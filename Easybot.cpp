@@ -7,67 +7,65 @@
 /*void EasybotNano::begin(){
  
 }*/
-
-
-///////////////////////////////////////
+///////////////////////////////////////////
 void EasybotNano::moveForward(int speed){
- int movespeed = speed*255/100; 
- LeftMotor.run(movespeed);
- RightMotor.run(movespeed);
+ int movespeed = (float)speed*255/100; 
+ LeftMotor.run(_Lcal*movespeed);
+ RightMotor.run(_Rcal*movespeed);
 }
-////
+///////////////////////////////////
 void EasybotNano::moveBack(int speed){
-int  movespeed = speed*255/100; 
- LeftMotor.run(-movespeed);
- RightMotor.run(-movespeed);	
+int  movespeed = (float)speed*255/100; 
+ LeftMotor.run(-movespeed*_Lcal);
+ RightMotor.run(-movespeed*_Rcal);  
 }
 ////////////////////////////////////////////
  void EasybotNano::moveForward(int leftspeed,int rightspeed)
  {
- 	int Lspeed = leftspeed*255/100;
- 	int Rspeed = rightspeed*255/100;
- 	LeftMotor.run(Lspeed);
- 	RightMotor.run(Rspeed);
+  int Lspeed = _Lcal*leftspeed*255/100;
+  int Rspeed = _Rcal*rightspeed*255/100;
+  LeftMotor.run(Lspeed);
+  RightMotor.run(Rspeed);
  }
-
+////////////////////////////////////////////
  void EasybotNano::moveRight(int speed)
  {
 //int rspeed;
-//rspeed = speed*255/100; 	
-moveForward(speed,0);
+//rspeed = speed*255/100;   
+moveForward(_Rcal*speed,0);
 
  }
- ///
+ ///////////////////////////////////////////
  void EasybotNano::moveLeft(int speed)
  {
 //int rspeed;
-//rspeed = speed*255/100; 	
-moveForward(0,speed);
+//rspeed = speed*255/100;   
+moveForward(0,_Lcal*speed);
  }
  
 //////////////////////////////
 void EasybotNano::stop()
 {
-	LeftMotor.stop();
+  LeftMotor.stop();
   RightMotor.stop();
 }
 ///////////////////////////////
-
+///////////////////////////////
 void EasybotNano::turnRight(int speed){
-int turnspeed = speed*255/100;
+int turnspeed = (float)speed*255/100;
 
-LeftMotor.run(turnspeed);
-RightMotor.run(-turnspeed);
+LeftMotor.run(_Lcal*turnspeed);
+RightMotor.run(-turnspeed*_Rcal);
 
 }
 /////////////////////////////////////////
 void EasybotNano::turnRight(int speed,int time)
 {
-int turnspeed = speed*255/100;
+int turnspeed = (float)speed*255/100;
 int i = 0;
 
-LeftMotor.run(turnspeed);
-RightMotor.run(-turnspeed);
+LeftMotor.run(_Lcal*turnspeed);
+RightMotor.run(-turnspeed*_Rcal);
 for (i=0;i<time;i++)
  {
   delay(100);
@@ -77,12 +75,12 @@ for (i=0;i<time;i++)
 }
 /////////////////////
 void EasybotNano::turnLeft(int speed){
-int turnspeed = speed*255/100;
+int turnspeed = (float)speed*255/100;
 //LeftMotor.stop();
 //RightMotor.stop();
 //delayMicroseconds(deadband_time);
-	 LeftMotor.run(-turnspeed);
-	 RightMotor.run(turnspeed);
+   LeftMotor.run(-turnspeed*_Lcal);
+   RightMotor.run(turnspeed*_Rcal);
 //delay(turn_duration_time);
 //LeftMotor.stop();
 //RightMotor.stop();
@@ -91,11 +89,12 @@ int turnspeed = speed*255/100;
 //////////
 void EasybotNano::turnLeft(int speed,int time)
 {
-int turnspeed = speed*255/100;
+int turnspeed = (float)speed*255/100;
 int i = 0;
 
-LeftMotor.run(-turnspeed);
-RightMotor.run(turnspeed);
+LeftMotor.run(-turnspeed*_Lcal);
+RightMotor.run(turnspeed*_Rcal);
+
 for (i=0;i<time;i++)
  {
   delay(100);
@@ -190,23 +189,22 @@ float EasybotNano::readSonar() {
   delay(100);
 return range;
     }
+/////////////////////////////
 void EasybotNano::setServo(int Angle)
 {
 // if (!servo.attached) 
-  servo.attach(Servo_Pin);
+ servo.attach(Servo_Pin);
  servo.write(Angle);
 }
 /*
  //////////////////////////////////
- 
-void Easybot::lookright()
+ void Easybot::lookright()
 {
 	
 Headservo.attach(Servo1_pin);   	
 Headservo.write(Right_angle);
 delay(500);
 Headservo.detach();//release for using PWM on Pin 9,10
-
 
 }
 

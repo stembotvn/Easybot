@@ -103,17 +103,21 @@ public:
 
     //void begin();       
     //void waitStart(int distance);  //wait for signing in front of Robot with distance             
-    void moveForward(int speed);           // move forward function, Hàm chạy thẳng 
-    void moveForward(int Leftspeed,int rightspeed);  // move forward with manual adjust Left, Right Wheel Speed || Hàm chạy thẳng với tham số bánh trái và phải tùy chỉnh
-    void moveBack(int speed);            //  
-    void moveRight(int speed);           // move to the right  || Hàm chạy xiêng về bên phải
-    void moveLeft(int speed);            // move to the left   || Hàm chạy xiêng về bên trái
+  void calibrate_Speed(int LeftCal,int RightCal) {
+        _Lcal = (float)LeftCal/100;
+        _Rcal = (float)RightCal/100;
+    } 
+  void moveForward(int speed);           // move forward function, Hàm chạy thẳng 
+  void moveForward(int Leftspeed,int rightspeed);  // move forward with manual adjust Left, Right Wheel Speed || Hàm chạy thẳng với tham số bánh trái và phải tùy chỉnh
+  void moveBack(int speed);            //  
+  void moveRight(int speed);           // move to the right  || Hàm chạy xiêng về bên phải
+  void moveLeft(int speed);            // move to the left   || Hàm chạy xiêng về bên trái
  	void stop();						 // stop the robot       || Hàm dừng robot
 	void turnRight(int speed);           // turn to the right   || Quay robot sang phải 
 	void turnRight(int speed,int time);  //turn to the right, time interval is 100ms <-> const angle
 	void turnLeft(int speed);            //turn robot to the left || Quay robot sang trái
 	void turnLeft(int speed,int time);   //turn to the left, time interval is 100ms <-> const angle
-  	void setup_lineSensor(int color, int threshold_detect);
+  void setup_lineSensor(int color, int threshold_detect);
 	int  readSensor(int channel);        ///Read line sensor with customized channel, return raw value, Channel is LEFTSENSOR, RIGHTSENSOR, CENTERSENSOR
 	bool leftSensor();                   //Read sensor detection, return 1 if detect line, return 0 if not detect line
 	bool rightSensor();                  //Read Right line sensor, return 1 if detect line, return 0 if not detect line
@@ -129,7 +133,8 @@ private:
    int _LINE_COLOR = BLACK;
    int _line_detect = 400; 
  //  SoftwareSerial BT; 
- 
+    float _Lcal = 1;
+    float _Rcal = 1;
 };
 
 
