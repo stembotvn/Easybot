@@ -22,7 +22,13 @@ Stembot V1.0
 #include "EasySonar.h"
 #include "EasyMotor.h"
 #include "ServoTimer2.h"
+#include "NegendoSounds.h"
+#include "Adafruit_NeoPixel.h"
+
 #include <SoftwareSerial.h>
+
+#include "RF24.h"
+#include "EEPROM.h"
 ///////////////////////////////////////////////////////////
 ////define for I/O Pins////////////////////////////////////
 #define _EasybotIO										///
@@ -86,9 +92,19 @@ Stembot V1.0
   #define LINE_COLOR            BLACK      
   #endif        ///default setting is black line   -> #define LINE_COLOR  WHITE  in the Sketch before #include "Easybot.h" to set line to WHITE
 // #define BT                    SoftSerial
- #define BT_Tx_Pin 7               
- #define BT_Rx_Pin 8
- #define Servo_Pin 2
+#define BT_Tx_Pin 7               
+#define BT_Rx_Pin 8
+#define Servo_Pin 7
+#define Button_Pin A7
+
+#define CE_PIN   A4
+#define CSN_PIN  A5
+
+#define LDR1  A6
+#define LDR2  A7
+#define RGB_Pin 8
+#define NumLedRGB 1
+#define Buzzer_Pin 2
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,21 +119,17 @@ public:
 
     //void begin();       
     //void waitStart(int distance);  //wait for signing in front of Robot with distance             
-  void calibrate_Speed(int LeftCal,int RightCal) {
-        _Lcal = (float)LeftCal/100;
-        _Rcal = (float)RightCal/100;
-    } 
-  void moveForward(int speed);           // move forward function, Hàm chạy thẳng 
-  void moveForward(int Leftspeed,int rightspeed);  // move forward with manual adjust Left, Right Wheel Speed || Hàm chạy thẳng với tham số bánh trái và phải tùy chỉnh
-  void moveBack(int speed);            //  
-  void moveRight(int speed);           // move to the right  || Hàm chạy xiêng về bên phải
-  void moveLeft(int speed);            // move to the left   || Hàm chạy xiêng về bên trái
+    void moveForward(int speed);           // move forward function, Hàm chạy thẳng 
+    void moveForward(int Leftspeed,int rightspeed);  // move forward with manual adjust Left, Right Wheel Speed || Hàm chạy thẳng với tham số bánh trái và phải tùy chỉnh
+    void moveBack(int speed);            //  
+    void moveRight(int speed);           // move to the right  || Hàm chạy xiêng về bên phải
+    void moveLeft(int speed);            // move to the left   || Hàm chạy xiêng về bên trái
  	void stop();						 // stop the robot       || Hàm dừng robot
 	void turnRight(int speed);           // turn to the right   || Quay robot sang phải 
 	void turnRight(int speed,int time);  //turn to the right, time interval is 100ms <-> const angle
 	void turnLeft(int speed);            //turn robot to the left || Quay robot sang trái
 	void turnLeft(int speed,int time);   //turn to the left, time interval is 100ms <-> const angle
-  void setup_lineSensor(int color, int threshold_detect);
+  	void setup_lineSensor(int color, int threshold_detect);
 	int  readSensor(int channel);        ///Read line sensor with customized channel, return raw value, Channel is LEFTSENSOR, RIGHTSENSOR, CENTERSENSOR
 	bool leftSensor();                   //Read sensor detection, return 1 if detect line, return 0 if not detect line
 	bool rightSensor();                  //Read Right line sensor, return 1 if detect line, return 0 if not detect line
@@ -125,6 +137,22 @@ public:
   float readSonar();            		 ///read the distance || Đọc khoảng cách ex: int khoangcach = robot.readSonar();
   void setServo(int angle);
   void disableServo() {servo.detach();}
+  void convertAdd();        // Chuyển đổi địa chỉ lưu từ EEPROM
+  void setAddress();        // Nhận địa chỉ ngẫu nhiên từ Transmitter
+  void initNRF();
+  void init();
+
+  int readLDRRight();
+  int readLDRLeft();
+
+  void setColor(byte R, byte G, byte B);
+  void offRGB();
+  bool readButton();
+
+  RF24 radio = RF24(CE_PIN, CSN_PIN);
+  NegendoSounds Sound = NegendoSounds(Buzzer_Pin);
+  Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NumLedRGB, RGB_Pin, NEO_GRB + NEO_KHZ800);
+
 private:
    EasyMotorL9110 RightMotor;
    EasyMotorL9110 LeftMotor;
@@ -133,8 +161,22 @@ private:
    int _LINE_COLOR = BLACK;
    int _line_detect = 400; 
  //  SoftwareSerial BT; 
-    float _Lcal = 1;
-    float _Rcal = 1;
+
+
+   
+
+   const uint64_t _AddDefault = 0xF0F0F0F001LL;  // Địa chỉ truyền tín hiệu NRF24L01 mặc định
+   uint64_t _AddRandom;              // Địa chỉ set ngẫu nhiên
+   byte _readAdd;
+   byte _address;
+   int _Add[1];
+   long _duration;
+   long _startTime;
+   long _timeout = 10000L;
+
+   int LDRR;
+   int LDRL;
+ 
 };
 
 
