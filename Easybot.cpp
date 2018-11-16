@@ -266,14 +266,14 @@ bool EasybotNano::inConfig() //check if press CONFIG KEY
   uint8_t size;
   long _duration=0;
   bool accessed = false;
-  if(!digitalRead(SET))
+  if(readButton())
   {
     #ifdef DEBUG
     Serial.println("CONFIG KEY PRESSED!");
     Serial.println("Wait 3s...");
     #endif 
     _startTime = millis();
-    while(!digitalRead(SET)) {
+    while(readButton()) {
     _duration = millis() - _startTime; 
       if(_duration > 3000) {
         accessed = true; 
@@ -430,6 +430,25 @@ void EasybotNano::runFunction(int device)
       Mode = RUN_MODE;
       break;
     }
+    case CONFIG:
+    {
+      if (Mode = CONFIG_MODE) {
+      uint16_t myAddress = readShort(6);
+      uint16_t toAddress = readShort(8);
+      config_Address(myAddress,toAddress); //saving new addressing pair
+      Sound.sing(S_connection);
+      // Mode = RUN_MODE;
+      }
+    }break;
+
+    case RCDATA:
+    {
+      Mode = RC_MODE; 
+      keyState = buffer[6];
+      varSlide = buffer[7];
+      remoteProcessing();      
+
+    }break;
   } 
 }
 ////////////////////////////////////////////////////
@@ -718,6 +737,10 @@ void EasybotNano::remoteProcessing(){
       
     RC_type = RC_MANUAL;
   } 
+  else if(!keyState)
+  {
+    stop();
+  }
   if (bitRead(keyState,4)) {   //F1 key press(shift)
     RC_type = RC_MANUAL;
   }
@@ -732,6 +755,11 @@ void EasybotNano::remoteProcessing(){
     RC_type  = CREATE_SOUND; 
 
   }
+  /*
+  else{
+    stop();
+    RC_type = RC_MANUAL;
+  }*/
 }     
 
 void EasybotNano::EEPROM_writeInt(int address,uint16_t value) 

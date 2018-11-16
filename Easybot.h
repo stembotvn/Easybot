@@ -33,6 +33,8 @@ Stembot V1.0
 
 #include "Scratch.h"
 ///////////////////////////////////////////////////////////
+#define DEBUG 1
+
 ////define for I/O Pins////////////////////////////////////
 #define _EasybotIO										///
 #define leftline_pin        0							///
