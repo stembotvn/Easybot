@@ -366,22 +366,24 @@ void EasybotNano::runFunction(int device)
   //int pin = port;
   switch(device)
   {
-    case RUN_ROBOT:
-    {
-      Mode = RUN_MODE;
-      break;
-    }
     case STOP:
     {
       stop();
       Mode = RUN_MODE;
       break;
     }
-    case FORWARD:
+    case SETMOTOR:
     {
       int leftspeed = readShort(6);
       int rightspeed = readShort(8);
       moveForward(leftspeed, rightspeed);
+      Mode = RUN_MODE;
+      break;
+    }
+    case FORWARD:
+    {
+      int speed = readShort(6);
+      moveForward(speed);
       Mode = RUN_MODE;
       break;
     }
@@ -413,7 +415,13 @@ void EasybotNano::runFunction(int device)
       Mode = RUN_MODE;
       break;
     }
-    case PLAYMELODY:
+    case DISABLE_SERVO:
+    {
+      disableServo();
+      Mode = RUN_MODE;
+      break;
+    }
+    case PLAYMEMODY:
     {
       float noteFrequency = readShort(6);
       float noteDuration = readShort(8);
@@ -427,6 +435,12 @@ void EasybotNano::runFunction(int device)
       byte G = readBuffer(7);
       byte B = readBuffer(8);
       setColor(R,G,B);
+      Mode = RUN_MODE;
+      break;
+    }
+    case OFFCOLOR:
+    {
+      offRGB();
       Mode = RUN_MODE;
       break;
     }

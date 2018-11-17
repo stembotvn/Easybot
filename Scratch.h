@@ -40,16 +40,17 @@ Define of ID function for Scratch interface
 #define TIMER 50
 #define TOUCH_SENSOR 51
 
-#define RUN_ROBOT 60
-#define STOP 61
+#define STOP 60
+#define SETMOTOR 61
 #define FORWARD 62
 #define BACKWARD 63
 #define TURNLEFT 64
 #define TURNRIGHT 65
 #define SETSERVO 66
-#define PLAYMELODY 67
-#define SETCOLOR 68
-#define OFFCOLOR 69
+#define DISABLE_SERVO 67
+#define PLAYMEMODY 68
+#define SETCOLOR 69
+#define OFFCOLOR 70
 ///////GET////////
 #define DISTANCE 71
 #define LIGHT_LEVEL 72

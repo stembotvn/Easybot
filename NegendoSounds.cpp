@@ -13,7 +13,7 @@ void NegendoSounds::_tone(float noteFrequency, long noteDuration, int silentDura
 }
 void NegendoSounds::_playNote(float noteFrequency, long noteDuration)
 {
-	tone(Buzzer_pin, noteDuration, noteDuration);
+	tone(Buzzer_pin, noteFrequency, noteDuration);
 	int pauseBetweenNotes = noteDuration * 1.30;
 	delay(pauseBetweenNotes);
 	noTone(Buzzer_pin);
