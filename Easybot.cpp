@@ -169,12 +169,13 @@ void EasybotNano::setServo(int Angle)
   servo.attach(Servo_Pin);
   servo.write(Angle);
 }
-//////////// NRF24L01 /////////////////////////
+//////////// NRF24L01 /////////////////////////////////////////////////////////////////////////
 void EasybotNano::init(int _address)
 {
   pinMode(Buzzer_Pin, OUTPUT);
   pinMode(RGB_Pin, OUTPUT);
   pixels.begin();
+  setColor(255, 0, 0);
   medium = (getLight(LEFT) + getLight(RIGHT)) / 2;
   Serial.begin(115200);
   initNRF(_address);
@@ -182,6 +183,8 @@ void EasybotNano::init(int _address)
     Serial.print("Robot Start, address: ");
     Serial.println(myNode); 
   #endif
+  delay(1000);
+  setColor(0, 0, 0);
 }
 int EasybotNano::getLight(byte side){
   if (!side) {  //LEFT
@@ -574,12 +577,13 @@ void EasybotNano::readRF(){
   RFread_size = 0; 
   if ( Radio.RFDataCome() )  {
     Serial.println("RF data come!");
-    // while (Radio.RFDataCome()) {
-    RFread_size = Radio.RFRead(buffer);
+    while (Radio.RFDataCome()) {
+      RFread_size = Radio.RFRead(buffer);
+    }
     isAvailable = true; 
-    //  }
-    if (RFread_size <3) return;
-    else if (buffer[0]==0xFF && buffer[1] == 0x55 && buffer[2] == (RFread_size - 3)){
+   
+   // if (RFread_size <3) return;
+     if (buffer[0]==0xFF && buffer[1] == 0x55 && buffer[2] == (RFread_size - 3)){
       #ifdef DEBUG 
         Serial.print("received valid Scratch RF data: ");
         PrintDebug(buffer,RFread_size);
@@ -596,7 +600,8 @@ void EasybotNano::readRF(){
       #ifdef DEBUG
         Serial.println("invalid data received"); 
       #endif
-      State = READ_RF;
+      callOK();
+      State = WRITE_RF;
       first_run = true;      //set first run for next State
       return;
     }
@@ -654,6 +659,7 @@ void EasybotNano::parseData()
         if (device == CONFIG) {
           Mode = RUN_MODE; //done config, go back to run mode, no ACK response
           State = READ_RF;
+          clearBuffer(buffer,32);
           first_run = true; 
         }
       }
@@ -705,6 +711,8 @@ void EasybotNano::writeRF() {
   }  
   ind = 0; 
   State = READ_RF; 
+  clearBuffer(buffer,32);
+
   first_run = true;      //set first run for next State
 }
 //////////////////////////////////////////////////////////////
