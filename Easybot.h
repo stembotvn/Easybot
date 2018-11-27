@@ -171,9 +171,9 @@ public:
 	void turnLeft(int speed,int time);   //turn to the left, time interval is 100ms <-> const angle
   void setup_lineSensor(int color, int threshold_detect);
 	int  readSensor(int channel);        ///Read line sensor with customized channel, return raw value, Channel is LEFTSENSOR, RIGHTSENSOR, CENTERSENSOR
-	bool leftSensor();                   //Read sensor detection, return 1 if detect line, return 0 if not detect line
-	bool rightSensor();                  //Read Right line sensor, return 1 if detect line, return 0 if not detect line
-	bool centerSensor();				 //Read Center line Sensor, return 1 if detect line, return 0 if not detect line
+	int leftSensor();                   //Read sensor detection, return 1 if detect line, return 0 if not detect line
+	int rightSensor();                  //Read Right line sensor, return 1 if detect line, return 0 if not detect line
+	int centerSensor();				 //Read Center line Sensor, return 1 if detect line, return 0 if not detect line
   float readSonar();            		 ///read the distance || Đọc khoảng cách ex: int khoangcach = robot.readSonar();
   void setServo(int angle);
   void disableServo() {servo.detach();}

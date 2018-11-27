@@ -97,64 +97,31 @@ int EasybotNano::readSensor(int channel)
   return line_value;
 }
 ///////////////////////////////////////////////////////
-bool EasybotNano::leftSensor()
-{
-  bool color;	
+int EasybotNano::leftSensor()
+{	
   int value;
   digitalWrite(lineSensor_enable,HIGH);
   value = analogRead(leftline_pin);
   digitalWrite(lineSensor_enable,LOW);
-  color  =  _LINE_COLOR; 
-  if (color == BLACK) 
-  {
-    if (value>_line_detect) return 1;
-    else return 0;
-  }
-  else 
-  {
-    if (value<_line_detect) return 1;
-    else return 0;
-  }
+  return value;
 }
 ////////////////////////////////////////////////////////
-bool EasybotNano::rightSensor()
+int EasybotNano::rightSensor()
 {
-  bool color;
   int value;		
   digitalWrite(lineSensor_enable,HIGH);
   value = analogRead(rightline_pin);
   digitalWrite(lineSensor_enable,LOW);
-  color  =  _LINE_COLOR; 
-  if (color == BLACK) 
-  {
-    if (value>_line_detect) return 1;
-    else return 0;
-  }
-  else 
-  {
-    if (value<_line_detect) return 1;
-    else return 0;
-  }
+  return value;
 }
 ///////////////////////////////////////////////////
-bool EasybotNano::centerSensor()
+int EasybotNano::centerSensor()
 {
-  bool color;
   int value;	
   digitalWrite(lineSensor_enable,HIGH);
   value = analogRead(centerline_pin);
   digitalWrite(lineSensor_enable,LOW); 
-  color  =  _LINE_COLOR; 
-  if (color == BLACK) 
-  {
-    if (value>_line_detect) return 1;
-    else return 0;
-  }
-  else 
-  {
-    if (value<_line_detect) return 1;
-    else return 0;
-  }
+  return value;
 }
 ///////////////////////////////////
 float EasybotNano::readSonar() 
@@ -498,19 +465,19 @@ void EasybotNano::readSensors(int device)
 
     case CENTERLINE:
     {
-      sendByte((byte)centerSensor());
+      sendShort((int)centerSensor());
     }
     break;
 
     case RIGHTLINE:
     {
-      sendByte((byte)rightSensor());
+      sendShort((int)rightSensor());
     }
     break;
 
     case LEFTLINE:
     {
-      sendByte((byte)leftSensor());
+      sendShort((int)leftSensor());
     }
     break;
 
