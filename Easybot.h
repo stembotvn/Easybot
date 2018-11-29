@@ -22,7 +22,8 @@ Stembot V1.0
 #include "EasyRF.h"
 #include "EasySonar.h"
 #include "EasyMotor.h"
-#include "ServoTimer2.h"
+//#include "ServoTimer2.h"
+#include <Servo.h>
 #include "NegendoSounds.h"
 #include "Adafruit_NeoPixel.h"
 
@@ -52,8 +53,8 @@ Stembot V1.0
 #define leftMotor_pinA    5          //_pinB1A   ///
 #define leftMotor_pinB    6          //_pinB1B      ///
 
-#define rightMotor_pinA   9          //_pinB1A      ///
-#define rightMotor_pinB   10         //_pinB1B      ///
+#define rightMotor_pinA   7          //_pinB1A      ///
+#define rightMotor_pinB   8         //_pinB1B      ///
                  ///
 /*
 //define for NanoBoard with L298/L293 Driver ///
@@ -91,17 +92,16 @@ Stembot V1.0
   #define LINE_COLOR            BLACK      
 #endif        ///default setting is black line   -> #define LINE_COLOR  WHITE  in the Sketch before #include "Easybot.h" to set line to WHITE
 // #define BT                    SoftSerial
-#define BT_Tx_Pin 7               
-#define BT_Rx_Pin 8
-#define Servo_Pin 7
-#define SET A7
 
-#define CE_PIN   A4
-#define CSN_PIN  A5
+#define Servo_Pin 4
+#define SET A5
+
+#define CE_PIN   9
+#define CSN_PIN  10
 
 #define LDR1  A6
 #define LDR2  A7
-#define RGB_Pin 8
+#define RGB_Pin 0
 #define NumLedRGB 1
 #define Buzzer_Pin 2
 ///////////////////// RF24 Dogle ////////////////////////
@@ -156,6 +156,8 @@ public:
   uint8_t varSlide = 0;
   uint8_t RC_type = RC_MANUAL;
   bool connection = PAIRING; 
+  int lastAngle = 90; 
+  int currentAngle = 90; 
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //void begin();       
   //void waitStart(int distance);  //wait for signing in front of Robot with distance             
@@ -195,7 +197,7 @@ private:
   EasyMotorL9110 RightMotor;
   EasyMotorL9110 LeftMotor;
   EasySonar Distance;
-  ServoTimer2 servo;
+  Servo servo;
   int _LINE_COLOR = BLACK;
   int _line_detect = 400; 
   int LDRR;

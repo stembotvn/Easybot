@@ -133,8 +133,55 @@ float EasybotNano::readSonar()
 void EasybotNano::setServo(int Angle)
 {
   // if (!servo.attached) 
+  /*
+  int t = 80;
+  #ifdef DEBUG
+  Serial.print(" Servo start from : ");Serial.print(lastAngle);
+  #endif 
+  servo.attach(Servo_Pin);
+  //int last = lastAngle; 
+  #ifdef DEBUG
+  Serial.println( "  to Angle: ");
+  #endif
+  if (lastAngle<Angle) {
+   for (int i=lastAngle;i==Angle;i++)    {
+     #ifdef DEBUG
+     Serial.println(i);
+     #endif
+     servo.write(i);
+     delay(t);
+     }
+
+  }
+  else if (lastAngle>Angle){
+     for (int i=lastAngle;i==Angle;i--)    {
+       #ifdef DEBUG
+     Serial.println(i);
+     #endif
+       servo.write(i);
+      delay(t);
+     }
+
+  }
+  else 
+     #ifdef DEBUG
+     Serial.println("  Angle not change ");
+     #endif
+lastAngle = Angle;
+ // servo.write(Angle);
+  //delay(500);
+ servo.detach();
+*/
+
+
+  #ifdef DEBUG
+  Serial.print(" Servo start from : ");Serial.print(lastAngle);
+  #endif 
   servo.attach(Servo_Pin);
   servo.write(Angle);
+  delay(500);
+  servo.detach();
+
 }
 //////////// NRF24L01 /////////////////////////////////////////////////////////////////////////
 void EasybotNano::init(int _address)
@@ -152,6 +199,11 @@ void EasybotNano::init(int _address)
   #endif
   delay(1000);
   setColor(0, 0, 0);
+  servo.attach(Servo_Pin);
+  servo.write(90);  
+  servo.detach();
+  Sound.sing(S_connection);
+ // servo.detach();
 }
 int EasybotNano::getLight(byte side){
   if (!side) {  //LEFT
@@ -187,11 +239,8 @@ void EasybotNano::offRGB()
 }
 bool EasybotNano::readButton()
 {
-  int BT = analogRead(SET);
-  if(BT > 1020)
-    return 1;
-  else
-    return 0;
+  pinMode(SET,INPUT_PULLUP);
+  return (!digitalRead(SET));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -689,11 +738,15 @@ void EasybotNano::remoteProcessing(){
   ///          F4 F3 F2 F1 L  R Bwd Fwd       ////
   ////////////////////////////////////////////////
   bool shift = bitRead(keyState,4);
-  speed = map(varSlide,0,100,0,100); //mapping from 0-100% to real delay value of steps 150 ms - 50ms
+  int robotSpeed = 100;
+  #ifdef DEBUG
+ Serial.print(" varSlide = :");Serial.println(varSlide);
+  #endif
+  int headAngle = map(varSlide,0,100,0,180); //mapping from 0-100% to 0 - 180 
   if (bitRead(keyState,0)) { //forward
     if(!shift)
     {
-      moveForward(speed);
+      moveForward(robotSpeed);
     }
     else 
       
@@ -702,7 +755,7 @@ void EasybotNano::remoteProcessing(){
   else if (bitRead(keyState,1)) {
     if(!shift)
     {
-      moveBack(speed);
+      moveBack(robotSpeed);
     }
     else 
       
@@ -711,7 +764,7 @@ void EasybotNano::remoteProcessing(){
   else if (bitRead(keyState,2)) {
     if(!shift)
     {
-      turnLeft(speed);
+      turnLeft(robotSpeed);
     }
     else 
       
@@ -720,7 +773,7 @@ void EasybotNano::remoteProcessing(){
   else if (bitRead(keyState,3)) {
     if(!shift)
     {
-      turnRight(speed);
+      turnRight(robotSpeed);
     }
     else
       
@@ -730,6 +783,16 @@ void EasybotNano::remoteProcessing(){
   {
     stop();
   }
+
+
+   if (bitRead(keyState,4)) {   //F1 key press(shift)
+    RC_type = RC_MANUAL;
+    #ifdef DEBUG
+    Serial.print("Set Servo :"); Serial.println(headAngle);
+    #endif
+    setServo(headAngle);
+  } 
+  /*
   if (bitRead(keyState,4)) {   //F1 key press(shift)
     RC_type = RC_MANUAL;
   }
@@ -743,7 +806,7 @@ void EasybotNano::remoteProcessing(){
   else if (bitRead(keyState,7)) {  //F4 key press
     RC_type  = CREATE_SOUND; 
 
-  }
+  }*/
   /*
   else{
     stop();
