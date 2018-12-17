@@ -138,6 +138,7 @@ public:
 	{} //initializer list for objects using within this Class
   void init(int _address);
   void initNRF(int _address);
+  void resetNRF();
   void load_address();        // Chuyển đổi địa chỉ lưu từ EEPROM
   bool inConfig();        // Nhận địa chỉ ngẫu nhiên từ Transmitter
   ///State Function/////
