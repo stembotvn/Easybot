@@ -51,6 +51,7 @@ Define of ID function for Scratch interface
 #define PLAYMEMODY 68
 #define SETCOLOR 69
 #define OFFCOLOR 70
+#define CREATESOUND 76
 ///////GET////////
 #define DISTANCE 71
 #define LIGHT_LEVEL 72

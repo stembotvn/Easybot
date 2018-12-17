@@ -136,6 +136,60 @@ void EasybotNano::setServo(int Angle)
   servo.attach(Servo_Pin);
   servo.write(Angle);
 }
+void EasybotNano::lightfollow()
+{
+  int left = getLight(LEFT);
+  int right = getLight(RIGHT);
+  if((right < (medium + 10)) && (left < medium + 10)){
+    stop();
+  }
+  else if((right > (medium + 20)) && (left > medium + 20)){
+    moveForward(speed);
+  }
+  else if((left - right) > 30){
+    turnLeft(speed);
+  }
+  else if((right - left) > 30){
+    turnRight(speed);
+  }
+}
+void EasybotNano::avoidobstacle()
+{
+  int distance = getDistance();
+  if (distance > 15){
+    moveForward(speed);
+  }
+  else { 
+    stop();
+    delay(300);
+    moveBack(speed);
+    delay(500);
+    stop();
+    turnLeft(speed);
+    delay(300);
+    stop();
+    if (getDistance()<15){
+      turnRight(speed);
+      delay(600);
+      stop();
+    }
+  }
+}
+void EasybotNano::linefollow()
+{
+  if(centerSensor() > 350)
+  {
+    moveForward(80,80);
+  }
+  else if(rightSensor() > 350)
+  {
+    turnRight(70);
+  }
+  else if(leftSensor() > 350)
+  {
+    turnLeft(70);
+  }
+}
 //////////// NRF24L01 /////////////////////////////////////////////////////////////////////////
 void EasybotNano::init(int _address)
 {
@@ -152,6 +206,12 @@ void EasybotNano::init(int _address)
   #endif
   delay(1000);
   setColor(0, 0, 0);
+  Sound.sing(Mode3);
+  first_process = true;
+  if(readButton())
+  {
+    inConfig();
+  }
 }
 int EasybotNano::getLight(byte side){
   if (!side) {  //LEFT
@@ -247,7 +307,7 @@ bool EasybotNano::inConfig() //check if press CONFIG KEY
     _duration = millis() - _startTime; 
       if(_duration > 3000) {
         accessed = true; 
-        Sound.sing(S_buttonPushed);
+        Sound.sing(ButtonPushed);
       }
     }    // wait to check holding key timing
     if(accessed)
@@ -265,7 +325,7 @@ bool EasybotNano::inConfig() //check if press CONFIG KEY
       Serial.println("CONFIG MODE IS NOT ACCESSED!");
       #endif 
      // tick(1,1000,1000);
-     Sound.sing(S_disconnection);
+     Sound.sing(Disconnection);
     }
 
   }
@@ -298,7 +358,98 @@ void EasybotNano::config_Address(uint16_t myAddress,uint16_t toAddress){
     Serial.print("Set address done:"); Serial.println(myNode);
   #endif                
 }
+///////////////////////////////////////////////////////////////////////
+int EasybotNano::changeMode()
+{
+  Sound.sing(Disconnection);
+  processMode++;
+  if(processMode == 5)
+    processMode = ONLINE;
 
+  if(processMode == ONLINE)
+  {
+    #ifdef DEBUG
+      Serial.println(String("Process Mode: ") + processMode);
+    #endif
+    setColor(255,0,0);
+
+    delay(500);
+    offRGB();
+  }
+  else if(processMode == LIGHT)
+  {
+    #ifdef DEBUG
+      Serial.println(String("Process Mode: ") + processMode);
+    #endif
+    setColor(0,255,0);
+    delay(500);
+    offRGB();
+  }
+  else if(processMode == LINE)
+  {
+    #ifdef DEBUG
+      Serial.println(String("Process Mode: ") + processMode);
+    #endif
+    setColor(0,0,255);
+    delay(500);
+    offRGB();
+  }
+  else if(processMode == AVOID)
+  {
+    #ifdef DEBUG
+      Serial.println(String("Process Mode: ") + processMode);
+    #endif
+    setColor(255,255,0);
+    delay(500);
+    offRGB();
+  }
+  else if(processMode == OFFLINE)
+  {
+    #ifdef DEBUG
+      Serial.println(String("Process Mode: ") + processMode);
+    #endif
+    setColor(255,255,255);
+    delay(500);
+    offRGB();
+  }
+  return processMode;
+}
+void EasybotNano::process()
+{
+  do
+  {
+    switch(processMode)
+    {
+      case ONLINE:
+      {
+        run();
+        break;
+      }
+      case LIGHT:
+      {
+        lightfollow();
+        break;
+      }
+      case LINE:
+      {
+        linefollow();
+        break;
+      }
+      case AVOID:
+      {
+        avoidobstacle();
+        break;
+      }
+      case OFFLINE:
+      {
+        break;
+      }
+    }
+    if(readButton()) changeMode();
+  }
+  while(processMode != OFFLINE);
+}
+///////////////////////////////////////////////////////////////////////
 void EasybotNano::run(){
   if (first_run)  {
     timeStart = millis();
@@ -414,13 +565,20 @@ void EasybotNano::runFunction(int device)
       Mode = RUN_MODE;
       break;
     }
+    case CREATESOUND:
+    {
+      int sounds = readShort(6);
+      Sound.sing(sounds);
+      Mode = RUN_MODE;
+      break;
+    }
     case CONFIG:
     {
       if (Mode = CONFIG_MODE) {
       uint16_t myAddress = readShort(6);
       uint16_t toAddress = readShort(8);
       config_Address(myAddress,toAddress); //saving new addressing pair
-      Sound.sing(S_connection);
+      Sound.sing(Connection);
       // Mode = RUN_MODE;
       }
     }break;
@@ -574,12 +732,14 @@ void EasybotNano::readRF(){
     }
    //Data available, go to Parsing
   }
+  /*
   else {
     inConfig();  //if not receive RF data, check the config key 
     //State = IN_CONFIG;    //if not received RF message, go to check config mode access
     //first_run = true; 
     if (Mode == RC_MODE && RC_type != RC_MANUAL) { State = RC; first_run = true; } 
   } 
+  */
 }
 ////
 void EasybotNano::PrintDebug(unsigned char *buf,int len){

@@ -26,7 +26,7 @@ Stembot V1.0
 #include "NegendoSounds.h"
 #include "Adafruit_NeoPixel.h"
 
-#include <SoftwareSerial.h>
+//#include <SoftwareSerial.h>
 
 #include "RF24.h"
 #include "EEPROM.h"
@@ -105,6 +105,12 @@ Stembot V1.0
 #define NumLedRGB 1
 #define Buzzer_Pin 2
 ///////////////////// RF24 Dogle ////////////////////////
+//////// define Mode process ////////////////////
+#define ONLINE 0
+#define LIGHT 1
+#define LINE 2
+#define AVOID 3
+#define OFFLINE 4
 ////////define State 
 #define READ_RF   0
 #define PARSING   1
@@ -152,6 +158,7 @@ public:
   void remoteProcessing();
   ////
   int State = 0;
+  int processMode = 0;
   uint8_t keyState = 0;
   uint8_t varSlide = 0;
   uint8_t RC_type = RC_MANUAL;
@@ -185,6 +192,13 @@ public:
   void offRGB();
   bool readButton();
 
+  void process();
+  
+  int changeMode();
+  void lightfollow();
+  void avoidobstacle();
+  void linefollow();
+
   RF24 myRadio=RF24(CE_PIN,CSN_PIN);
   EasyRF Radio = EasyRF(myRadio);
 
@@ -212,6 +226,7 @@ private:
   uint16_t new_addr; 
   uint16_t  Default_Addr = 1000;
   uint16_t  Multicast_Node = 255;
+  bool first_process = true;
   bool first_run = true;
   bool actionDone = false; 
   uint8_t Mode = RUN_MODE; 
