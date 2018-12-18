@@ -138,39 +138,40 @@ void EasybotNano::setServo(int Angle)
 }
 void EasybotNano::lightfollow()
 {
-  int left = getLight(LEFT);
-  int right = getLight(RIGHT);
+  int left = getLight(1);
+  int right = getLight(0);
   if((right < (medium + 10)) && (left < medium + 10)){
     stop();
   }
-  else if((right > (medium + 20)) && (left > medium + 20)){
-    moveForward(speed);
+  else if((left - right) > 10){
+    turnLeft(70);
   }
-  else if((left - right) > 30){
-    turnLeft(speed);
+  else if((right - left) > 10){
+    turnRight(70);
   }
-  else if((right - left) > 30){
-    turnRight(speed);
+  else if((right > (medium + 10)) && (left > medium + 10)){
+    moveForward(80);
   }
+  
 }
 void EasybotNano::avoidobstacle()
 {
   int distance = getDistance();
   if (distance > 15){
-    moveForward(speed);
+    moveForward(80);
   }
   else { 
     stop();
     delay(300);
-    moveBack(speed);
+    moveBack(80);
     delay(500);
     stop();
-    turnLeft(speed);
-    delay(300);
+    turnLeft(70);
+    delay(500);
     stop();
     if (getDistance()<15){
-      turnRight(speed);
-      delay(600);
+      turnRight(70);
+      delay(1000);
       stop();
     }
   }
@@ -216,13 +217,13 @@ void EasybotNano::init(int _address)
 int EasybotNano::getLight(byte side){
   if (!side) {  //LEFT
     int LDRL = analogRead(LDR2);
-    LDRL = map(LDRL,0,800,0,100);
+    LDRL = map(LDRL,0,1000,0,100);
     LDRL = LDRL > 100 ? 100 : LDRL;
     return LDRL;
   } 
   else {
     int LDRR = analogRead(LDR1);
-    LDRR = map(LDRR,0,800,0,100);
+    LDRR = map(LDRR,0,1000,0,100);
     LDRR = LDRR > 100 ? 100 : LDRR;
     return LDRR;
   }
@@ -273,6 +274,15 @@ void EasybotNano::initNRF(int _address)
   Radio.init(myNode);    //init with my Node address
   first_run = true;      //set first run for next State
 }
+void EasybotNano::resetNRF(){
+
+  Radio.RFpowerDown();
+  Radio.init(myNode);    //init with my Node address
+  stop();
+  Radio.RFpowerUp();
+  first_run = true;      //set first run for next State
+
+}
 void EasybotNano::load_address()
 { 
    #ifdef DEBUG
@@ -307,11 +317,12 @@ bool EasybotNano::inConfig() //check if press CONFIG KEY
     _duration = millis() - _startTime; 
       if(_duration > 3000) {
         accessed = true; 
-        Sound.sing(ButtonPushed);
+        Sound.sing(Sad);
       }
     }    // wait to check holding key timing
     if(accessed)
     { 
+      setColor(255,0,255);
       Radio.init(Default_Addr);  // set Default Address to listen for Config Address Mode 
       #ifdef DEBUG
       Serial.print("GOING TO CONFIG MODE WITH DEFAULT CONFIG ADDRESS...:");Serial.println(Default_Addr);
@@ -361,6 +372,7 @@ void EasybotNano::config_Address(uint16_t myAddress,uint16_t toAddress){
 ///////////////////////////////////////////////////////////////////////
 int EasybotNano::changeMode()
 {
+  stop();
   Sound.sing(Disconnection);
   processMode++;
   if(processMode == 5)
@@ -650,18 +662,18 @@ void EasybotNano::readSensors(int device)
 void EasybotNano::RC_Run(){
   switch (RC_type){ 
     case LIGHT_FOLLOW: {
-      int left = getLight(LEFT);
-      int right = getLight(RIGHT);
+      int left = getLight(1);
+      int right = getLight(0);
       if((right < (medium + 10)) && (left < medium + 10)){
         stop();
       }
-      else if((right > (medium + 20)) && (left > medium + 20)){
+      else if((right > (medium + 10)) && (left > medium + 10)){
         moveForward(speed);
       }
-      else if((left - right) > 30){
+      else if((left - right) > 10){
         turnLeft(speed);
       }
-      else if((right - left) > 30){
+      else if((right - left) > 10){
         turnRight(speed);
       }
     } break;
@@ -788,6 +800,7 @@ void EasybotNano::parseData()
           State = READ_RF;
           clearBuffer(buffer,32);
           first_run = true; 
+          offRGB();
         }
       }
       else if (Mode == RC_MODE) {    //in RC Mode 
@@ -835,6 +848,7 @@ void EasybotNano::writeRF() {
     #ifdef DEBUG 
       Serial.println("Sent FAIL ");
     #endif 
+    resetNRF();
   }  
   ind = 0; 
   State = READ_RF; 
