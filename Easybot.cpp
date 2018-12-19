@@ -275,13 +275,16 @@ void EasybotNano::initNRF(int _address)
   first_run = true;      //set first run for next State
 }
 void EasybotNano::resetNRF(){
-
-  Radio.RFpowerDown();
-  Radio.init(myNode);    //init with my Node address
+  Serial.println("Reset RF module");
   stop();
+  Radio.RFpowerDown();
+  delay(500);
   Radio.RFpowerUp();
+  delay(200);
+  Radio.init(myNode);    //init with my Node address
+ 
   first_run = true;      //set first run for next State
-
+  
 }
 void EasybotNano::load_address()
 { 
@@ -849,6 +852,7 @@ void EasybotNano::writeRF() {
       Serial.println("Sent FAIL ");
     #endif 
     resetNRF();
+   // Sound.sing(OhOoh); 
   }  
   ind = 0; 
   State = READ_RF; 
