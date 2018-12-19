@@ -110,24 +110,24 @@
 #define  note_Eb8 4978.03  //D#8/Eb8
 
 
-#define S_connection 	0
-#define S_disconnection 1
-#define S_buttonPushed 	2
-#define S_mode1 		3
-#define S_mode2 		4
-#define S_mode3 		5
-#define S_surprise 		6
-#define S_OhOoh 		7
-#define S_OhOoh2 		8
-#define S_cuddly 		9
-#define S_sleeping 		10
-#define S_happy 		11
-#define S_superHappy 	12
-#define S_happy_short 	13
-#define S_sad 			14
-#define S_confused 		15
-#define S_fart1			16
-#define S_fart2			17
-#define S_fart3			18
+#define Connection 	    0
+#define Disconnection   1
+#define ButtonPushed 	2
+#define Mode1 		    3
+#define Mode2 		    4
+#define Mode3 		    5
+#define Surprise 		6
+#define OhOoh 		    7
+#define OhOoh2 		    8
+#define Cuddly 		    9
+#define Sleeping 		10
+#define Happy 		    11
+#define SuperHappy 	    12
+#define Happy_short 	13
+#define Sad 			14
+#define Confused 		15
+#define Fart1			16
+#define Fart2			17
+#define Fart3			18
 
 #endif
