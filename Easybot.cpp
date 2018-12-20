@@ -207,12 +207,13 @@ void EasybotNano::init(int _address)
   #endif
   delay(1000);
   setColor(0, 0, 0);
-  Sound.sing(Mode3);
   first_process = true;
   if(readButton())
   {
     inConfig();
   }
+  else Sound.sing(Mode3);
+
 }
 int EasybotNano::getLight(byte side){
   if (!side) {  //LEFT
@@ -721,17 +722,17 @@ void EasybotNano::readRF(){
   if ( Radio.RFDataCome() )  {
     Serial.println("RF data come!");
     while (Radio.RFDataCome()) {
-      RFread_size = Radio.RFRead(buffer);
+      Radio.RFRead(buffer);
     }
     isAvailable = true; 
    
    // if (RFread_size <3) return;
-     int plen = buffer[2];
-     if (buffer[0]==0xFF && buffer[1] == 0x55 && buffer[plen+3] == 0xa){
+    // int plen = buffer[2];
+     if (buffer[0]==0xFF && buffer[1] == 0x55 ){  // check Start bytes and ending byte for validating data
       #ifdef DEBUG 
-        Serial.print("received valid Scratch RF data: ");
-        PrintDebug(buffer,RFread_size);
-        Serial.println();
+      Serial.print("received valid Scratch RF data: ");
+      PrintDebug(buffer,RFread_size);
+      Serial.println();
       #endif 
       State = PARSING;
       first_run = true;      //set first run for next State
@@ -744,7 +745,7 @@ void EasybotNano::readRF(){
       #ifdef DEBUG
         Serial.println("invalid data received"); 
       #endif
-      callOK();
+      callOK();          // if invalid data, do nothing and send back ACK
       State = WRITE_RF;
       first_run = true;      //set first run for next State
       return;
