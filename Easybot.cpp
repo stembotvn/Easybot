@@ -282,7 +282,8 @@ void EasybotNano::resetNRF(){
   delay(500);
   Radio.RFpowerUp();
   delay(200);
-  Radio.init(myNode);    //init with my Node address
+ Radio.setDynamicPayload(false); // disable Dynamic Payload;
+ Radio.init(myNode);    //init with my Node address
  
   first_run = true;      //set first run for next State
   
