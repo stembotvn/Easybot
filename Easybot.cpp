@@ -271,8 +271,8 @@ void EasybotNano::initNRF(int _address)
     toNode = 0;            //set Master address 
     connection = NETWORK;
   } 
+  Radio.setDynamicPayload(false); // disable Dynamic Payload;
   Radio.init(myNode);    //init with my Node address
-  Radio.setDynamicPayload(false);
   first_run = true;      //set first run for next State
 }
 void EasybotNano::resetNRF(){
@@ -716,6 +716,7 @@ void EasybotNano::RC_Run(){
 ////////////////////////////////////////////
 void EasybotNano::readRF(){
   RFread_size = 0; 
+  
   if ( Radio.RFDataCome() )  {
     Serial.println("RF data come!");
     while (Radio.RFDataCome()) {
@@ -724,8 +725,8 @@ void EasybotNano::readRF(){
     isAvailable = true; 
    
    // if (RFread_size <3) return;
-     
-     if (buffer[0]==0xFF && buffer[1] == 0x55 && buffer[2] == (RFread_size - 3)){
+     int plen = buffer[2];
+     if (buffer[0]==0xFF && buffer[1] == 0x55 && buffer[plen+3] == 0xa){
       #ifdef DEBUG 
         Serial.print("received valid Scratch RF data: ");
         PrintDebug(buffer,RFread_size);
