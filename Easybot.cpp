@@ -207,12 +207,13 @@ void EasybotNano::init(int _address)
   #endif
   delay(1000);
   setColor(0, 0, 0);
-  Sound.sing(Mode3);
   first_process = true;
   if(readButton())
   {
     inConfig();
   }
+  else   Sound.sing(Mode3);
+
 }
 int EasybotNano::getLight(byte side){
   if (!side) {  //LEFT
