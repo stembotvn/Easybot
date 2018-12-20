@@ -272,7 +272,7 @@ void EasybotNano::initNRF(int _address)
     connection = NETWORK;
   } 
   Radio.init(myNode);    //init with my Node address
-  Radio.setDynamicPayload(false);
+ // Radio.setDynamicPayload(false);
   first_run = true;      //set first run for next State
 }
 void EasybotNano::resetNRF(){
