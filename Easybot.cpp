@@ -720,9 +720,12 @@ void EasybotNano::readRF(){
   RFread_size = 0; 
   
   if ( Radio.RFDataCome() )  {
+    #ifdef DEBUG
     Serial.println("RF data come!");
+    Serial.println(Radio.checkCarrier() ? "Strong signal > 64dBm" : "Weak signal < 64dBm" );
+    #endif
     while (Radio.RFDataCome()) {
-      Radio.RFRead(buffer);
+      Radio.RFRead(buffer,sizeof(buffer));
     }
     isAvailable = true; 
    
@@ -806,7 +809,7 @@ void EasybotNano::parseData()
         if (device == CONFIG) {
           Mode = RUN_MODE; //done config, go back to run mode, no ACK response
           State = READ_RF;
-          clearBuffer(buffer,32);
+          clearBuffer(buffer,sizeof(buffer));
           first_run = true; 
           offRGB();
         }
@@ -840,11 +843,11 @@ void EasybotNano::parseData()
     }
     break;  
   }
-  clearBuffer(buffer,32);  //clear 20byte of receiving buffers 
+  clearBuffer(buffer,sizeof(buffer));  //clear 20byte of receiving buffers 
 }
 ///////////
 void EasybotNano::writeRF() {
-  bool OK = Radio.RFSend(toNode,RF_buf,ind+1);
+  bool OK = Radio.RFSend(toNode,RF_buf,sizeof(RF_buf));
   if (OK) {
     #ifdef DEBUG 
       Serial.print("Sent buffer: ");
@@ -861,7 +864,7 @@ void EasybotNano::writeRF() {
   }  
   ind = 0; 
   State = READ_RF; 
-  clearBuffer(buffer,32);
+  clearBuffer(buffer,sizeof(buffer));
 
   first_run = true;      //set first run for next State
 }

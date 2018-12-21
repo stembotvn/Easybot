@@ -237,7 +237,6 @@ private:
   long _timeout = 10000L;
   int  RFread_size; 
   bool _readDone = false; 
-  char _buffer[64];
 	bool  isAvailable = false;
   bool isStart=false;
   unsigned char prevc=0;
@@ -245,7 +244,7 @@ private:
   int ind = 0; 
   int dataLen;
   unsigned char buffer[32]; //for reading RF
-  unsigned char RF_buf[32]; //for writing RF
+  unsigned char RF_buf[12]; //for writing RF
   uint8_t command_index = 0;
 
   union
