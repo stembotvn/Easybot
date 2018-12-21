@@ -274,6 +274,10 @@ void EasybotNano::initNRF(int _address)
   } 
   Radio.setDynamicPayload(false); // disable Dynamic Payload;
   Radio.init(myNode);    //init with my Node address
+  Radio.setDataSpeed(RF24_1MBPS);
+  Radio.setChannelRF(108);
+  Radio.setPowerRF(RF24_PA_LOW);
+  Radio.setAutoACK(true);
   first_run = true;      //set first run for next State
 }
 void EasybotNano::resetNRF(){
