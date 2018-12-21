@@ -272,8 +272,8 @@ void EasybotNano::initNRF(int _address)
     toNode = 0;            //set Master address 
     connection = NETWORK;
   } 
+  // Radio.setDynamicPayload(false);
   Radio.init(myNode);    //init with my Node address
- // Radio.setDynamicPayload(false);
   first_run = true;      //set first run for next State
 }
 void EasybotNano::resetNRF(){
