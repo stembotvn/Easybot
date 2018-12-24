@@ -34,7 +34,6 @@ Stembot V1.0
 #include "Scratch.h"
 ///////////////////////////////////////////////////////////
 #define DEBUG 1
-
 ////define for I/O Pins////////////////////////////////////
 #define _EasybotIO										///
 #define leftline_pin        0							///
@@ -91,8 +90,6 @@ Stembot V1.0
   #define LINE_COLOR            BLACK      
 #endif        ///default setting is black line   -> #define LINE_COLOR  WHITE  in the Sketch before #include "Easybot.h" to set line to WHITE
 // #define BT                    SoftSerial
-#define BT_Tx_Pin 7               
-#define BT_Rx_Pin 8
 #define Servo_Pin 7
 #define SET A7
 

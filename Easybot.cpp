@@ -274,10 +274,10 @@ void EasybotNano::initNRF(int _address)
   } 
   Radio.setDynamicPayload(false); // disable Dynamic Payload;
   Radio.init(myNode);    //init with my Node address
-  Radio.setDataSpeed(RF24_1MBPS);
+  Radio.setDataSpeed(RF24_250KBPS);
   Radio.setChannelRF(108);
   Radio.setPowerRF(RF24_PA_LOW);
-  Radio.setAutoACK(true);
+  //Radio.setAutoACK(false);
   first_run = true;      //set first run for next State
 }
 void EasybotNano::resetNRF(){
@@ -738,7 +738,7 @@ void EasybotNano::readRF(){
      if (buffer[0]==0xFF && buffer[1] == 0x55 ){  // check Start bytes and ending byte for validating data
       #ifdef DEBUG 
       Serial.print("received valid Scratch RF data: ");
-      PrintDebug(buffer,RFread_size);
+      PrintDebug(buffer,buffer[2]+3);
       Serial.println();
       #endif 
       State = PARSING;
