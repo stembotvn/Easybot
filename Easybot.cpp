@@ -274,13 +274,14 @@ void EasybotNano::initNRF(int _address)
     connection = NETWORK;
   } 
   Radio.setDynamicPayload(false); // disable Dynamic Payload;
-  NRFConnected = Radio.init(myNode);    //init with my Node address
+  NRFConnected = Radio.RFbegin();    //init with my Node address
   if (NRFConnected) {
   Radio.setDataSpeed(RF24_250KBPS);
   Radio.setChannelRF(108);
   Radio.setPowerRF(RF24_PA_LOW);
   Serial.println("NRF wireless ready!"); 
   //Radio.setAutoACK(false);
+  Radio.init(myNode);
   interface = NRF24L01_INTERFACE;
   first_run = true;      //set first run for next State
   }
