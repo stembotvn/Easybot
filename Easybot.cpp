@@ -727,9 +727,74 @@ void EasybotNano::RC_Run(){
   State = READ_RF; 
   first_run = true;
 }
+/////////////////////////////////////////////
+void EasybotNano::readSerial(){
+isAvailable = false; 
+if (Serial.available() > 0){
+  isAvailable = true; 
+  serialRead = Serial.read();
+  }
+if (isAvailable) {
+    #ifdef DEBUG_SERIAL
+    Serial.print(".");
+    #endif
+   unsigned char c = serialRead&0xff;
+    if(c==0x55&&isStart==false){
+     if(prevc==0xff){
+      index=1;
+      isStart = true;
+      #ifdef DEBUG_SERIAL
+     // Serial.print("*");
+      #endif 
+      //buffer[index]=c;
+    }
+    }else{
+      prevc = c;  
+      if(isStart){
+        if(index==2){
+         dataLen = c; 
+          #ifdef DEBUG_SERIAL
+         Serial.print(c,HEX);
+         Serial.print(" ");
+         #endif 
+          }else if(index>2){
+          dataLen--;
+            #ifdef DEBUG_SERIAL
+             Serial.print(dataLen);
+             Serial.print(" ");
+            #endif
+        }
+      }
+    } 
+     buffer[index]=c;
+     index++;
+     if(index>51){
+      index=0; 
+      isStart=false;
+     }
+     if(isStart&&dataLen==0&&index>3){ 
+         isStart = false;
+         State = PARSING; // Serial Data available now, State change to parsing 
+         first_run = true;      //set first run for next State
+         #ifdef DEBUG 
+         Serial.print("Valid Data coming ");
+         for (int i=0;i<index+1;i++) {
+           Serial.print(buffer[i],HEX); Serial.print("-");
+         }
+         Serial.println();
+         Serial.println("Goto Parsing");
+         #endif
+        index=0;
+     }
+  }
+ 
+  
+   
+}  
+
 ////////////////////////////////////////////
 void EasybotNano::readRF(){
-  RFread_size = 0; 
+    RFread_size = 0; 
   
   if ( Radio.RFDataCome() )  {
     #ifdef DEBUG

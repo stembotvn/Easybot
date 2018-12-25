@@ -150,6 +150,7 @@ public:
   bool inConfig();        // Nhận địa chỉ ngẫu nhiên từ Transmitter
   ///State Function/////
   void config_Address(uint16_t myaddress,uint16_t toAddress);
+  void readSerial();
   void readRF();
   void parseData();
   void writeRF();
@@ -223,7 +224,7 @@ private:
   int songname = 3;
 
   int medium;
-
+  unsigned char serialRead;
   uint16_t myNode = 2; 
   uint16_t toNode;
   uint16_t new_addr; 
