@@ -128,6 +128,9 @@ Stembot V1.0
 ///////////////////////////
 #define NETWORK 1
 #define PAIRING 0
+////////////////////////////
+#define  NRF24L01_INTERFACE 1
+#define  SERIAL_INTERFACE 0
 ///////////////////////////
 #define MASTER_NODE 0
 #define MAX_PAYLOAD 24
@@ -162,6 +165,7 @@ public:
   uint8_t varSlide = 0;
   uint8_t RC_type = RC_MANUAL;
   bool connection = PAIRING; 
+  bool interface = NRF24L01_INTERFACE; 
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //void begin();       
   //void waitStart(int distance);  //wait for signing in front of Robot with distance             

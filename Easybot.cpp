@@ -260,6 +260,7 @@ bool EasybotNano::readButton()
 void EasybotNano::initNRF(int _address)
 {
   //config_Address(2,10); 
+  bool NRFConnected = false;
   if (!_address){
     #if DEBUG
     Serial.println("Pairing Mode loading...");
@@ -273,12 +274,20 @@ void EasybotNano::initNRF(int _address)
     connection = NETWORK;
   } 
   Radio.setDynamicPayload(false); // disable Dynamic Payload;
-  Radio.init(myNode);    //init with my Node address
+  NRFConnected = Radio.init(myNode);    //init with my Node address
+  if (NRFConnected) {
   Radio.setDataSpeed(RF24_250KBPS);
   Radio.setChannelRF(108);
   Radio.setPowerRF(RF24_PA_LOW);
+  Serial.println("NRF wireless ready!"); 
   //Radio.setAutoACK(false);
+  interface = NRF24L01_INTERFACE;
   first_run = true;      //set first run for next State
+  }
+  else {
+      Serial.println("NRF Module is missing, switch to Serial connection"); 
+      interface = SERIAL_INTERFACE; 
+  }
 }
 void EasybotNano::resetNRF(){
   Serial.println("Reset RF module");
@@ -306,9 +315,7 @@ void EasybotNano::load_address()
    Serial.print("Target Address: ");
   Serial.println(toNode);
     #endif
-
- // Radio.init(myNode);    //init with my Node address
-
+  // Radio.init(myNode);    //init with my Node address
 }
 /////
 bool EasybotNano::inConfig() //check if press CONFIG KEY
