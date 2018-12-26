@@ -193,7 +193,8 @@ void EasybotNano::linefollow()
 }
 //////////// NRF24L01 /////////////////////////////////////////////////////////////////////////
 void EasybotNano::init(int _address)
-{ delay(1000);
+{ 
+  delay(1000);
   pinMode(Buzzer_Pin, OUTPUT);
   pinMode(RGB_Pin, OUTPUT);
   pixels.begin();
@@ -216,12 +217,14 @@ void EasybotNano::init(int _address)
   }
   delay(1000);
   setColor(0, 0, 0);
+  if (interface == NRF24L01_INTERFACE){
   if(readButton())
   {
     inConfig();
   }
   else Sound.sing(Mode3);
- 
+  }
+  else Sound.sing(Mode3);
   first_run = true; 
   processMode = ONLINE;
 }
@@ -288,9 +291,10 @@ void EasybotNano::initNRF(int _address)
   //  Radio.RFbegin();    //init with my Node address
    NRFConnected = Radio.RFbegin();
   if (NRFConnected) {
-  Radio.setDataSpeed(RF24_250KBPS);
+  Radio.setDataSpeed(RF24_250KBPS); 
   Radio.setChannelRF(108);
   Radio.setPowerRF(RF24_PA_LOW);
+  Radio.setRetry(1,0);
   Serial.println("NRF wireless ready!"); 
   //Radio.setAutoACK(false);
   Radio.init(myNode);
@@ -305,15 +309,24 @@ void EasybotNano::initNRF(int _address)
   }
 }
 void EasybotNano::resetNRF(){
+  #ifdef DEBUG
   Serial.println("Reset RF module");
+  #endif
   stop();
   Radio.RFpowerDown();
-  delay(500);
-  Radio.RFpowerUp();
-  delay(200);
+  for (int i=0;i<3;i++){
+  setColor(255,0,0);
+  delay(250);
+  setColor(0,0,0);
+  delay(250);
+  }
  Radio.setDynamicPayload(false); // disable Dynamic Payload;
  Radio.init(myNode);    //init with my Node address
- 
+ Sound.sing(Happy_short);
+  setColor(255,0,0);
+  delay(250);
+  setColor(0,0,0);
+  //State = READ_RF;
   first_run = true;      //set first run for next State
   
 }
