@@ -193,28 +193,39 @@ void EasybotNano::linefollow()
 }
 //////////// NRF24L01 /////////////////////////////////////////////////////////////////////////
 void EasybotNano::init(int _address)
-{
+{ delay(1000);
   pinMode(Buzzer_Pin, OUTPUT);
   pinMode(RGB_Pin, OUTPUT);
   pixels.begin();
-  setColor(255, 0, 0);
   medium = (getLight(LEFT) + getLight(RIGHT)) / 2;
   Serial.begin(115200);
   initNRF(_address);
-  #ifdef DEBUG
-    Serial.print("Robot Start, address: ");
+  if (interface == NRF24L01_INTERFACE) {
+    State = READ_RF;
+    setColor(255,0,0);
+    #ifdef DEBUG
+    Serial.print("Curie Start with WireLess interface, Wireless address: ");
     Serial.println(myNode); 
   #endif
+  }
+  else  { 
+    State = READ_SERIAL;
+    setColor(0,0,255);
+    Serial.println("Curie Start with Serial USB interface");
+
+  }
   delay(1000);
   setColor(0, 0, 0);
-  first_process = true;
   if(readButton())
   {
     inConfig();
   }
   else Sound.sing(Mode3);
-
+ 
+  first_run = true; 
+  processMode = ONLINE;
 }
+///////////////////////////////////
 int EasybotNano::getLight(byte side){
   if (!side) {  //LEFT
     int LDRL = analogRead(LDR2);
@@ -274,7 +285,8 @@ void EasybotNano::initNRF(int _address)
     connection = NETWORK;
   } 
   Radio.setDynamicPayload(false); // disable Dynamic Payload;
-  NRFConnected = Radio.RFbegin();    //init with my Node address
+  //  Radio.RFbegin();    //init with my Node address
+   NRFConnected = Radio.RFbegin();
   if (NRFConnected) {
   Radio.setDataSpeed(RF24_250KBPS);
   Radio.setChannelRF(108);
@@ -288,6 +300,8 @@ void EasybotNano::initNRF(int _address)
   else {
       Serial.println("NRF Module is missing, switch to Serial connection"); 
       interface = SERIAL_INTERFACE; 
+      first_run = true;      //set first run for next State
+
   }
 }
 void EasybotNano::resetNRF(){
@@ -445,7 +459,9 @@ int EasybotNano::changeMode()
   return processMode;
 }
 void EasybotNano::process()
-{
+{ 
+ //
+  static bool first_process = true; 
   do
   {
     switch(processMode)
@@ -453,29 +469,36 @@ void EasybotNano::process()
       case ONLINE:
       {
         run();
-        break;
       }
+        break;
+      
       case LIGHT:
       {
         lightfollow();
-        break;
       }
+        break;
+      
       case LINE:
       {
         linefollow();
-        break;
       }
+        break;
+      
       case AVOID:
       {
         avoidobstacle();
+       }
         break;
-      }
+
       case OFFLINE:
       {
-        break;
       }
+      break;
+      
     }
+   // Serial.println("Check button");
     if(readButton()) changeMode();
+
   }
   while(processMode != OFFLINE);
 }
@@ -505,6 +528,15 @@ void EasybotNano::run(){
     break;
     case RC : {
       RC_Run();
+    }
+    break;
+    ///
+    case READ_SERIAL: {
+      readSerial();
+    }
+    break;
+    case WRITE_SERIAL: {
+      writeSerial();
     }
     break;
  }
@@ -729,12 +761,12 @@ void EasybotNano::RC_Run(){
 }
 /////////////////////////////////////////////
 void EasybotNano::readSerial(){
-isAvailable = false; 
+
+//isAvailable = false; 
 if (Serial.available() > 0){
   isAvailable = true; 
   serialRead = Serial.read();
-  }
-if (isAvailable) {
+
     #ifdef DEBUG_SERIAL
     Serial.print(".");
     #endif
@@ -787,7 +819,8 @@ if (isAvailable) {
         index=0;
      }
   }
- 
+ //else Serial.println("No serial comming");
+ //else LEDdebug();
   
    
 }  
@@ -795,7 +828,7 @@ if (isAvailable) {
 ////////////////////////////////////////////
 void EasybotNano::readRF(){
     RFread_size = 0; 
-  
+ //  LEDdebug();
   if ( Radio.RFDataCome() )  {
     #ifdef DEBUG
     Serial.println("RF data come!");
@@ -876,7 +909,8 @@ void EasybotNano::parseData()
       }
       readSensors(device);
       writeEnd();
-      State = WRITE_RF;
+      if (interface == NRF24L01_INTERFACE)  State = WRITE_RF;
+      else State = WRITE_SERIAL;
       first_run = true;      //set first run for next State
     }
     break;
@@ -914,7 +948,8 @@ void EasybotNano::parseData()
           Serial.println("Scratch command Done, go to send response");
         #endif 
         // delay(2000);
-        State = WRITE_RF;
+      if (interface == NRF24L01_INTERFACE)  State = WRITE_RF;
+      else State = WRITE_SERIAL;      
         first_run = true;   //set first run for next State
       }      
     }
@@ -942,8 +977,18 @@ void EasybotNano::writeRF() {
   ind = 0; 
   State = READ_RF; 
   clearBuffer(buffer,sizeof(buffer));
-
+  clearBuffer(RF_buf,sizeof(RF_buf));
   first_run = true;      //set first run for next State
+}
+//////////////////////////
+void EasybotNano::writeSerial(){
+for (int i=0;i<ind+1;i++) {
+  Serial.write(RF_buf[i]);
+  delayMicroseconds(100);
+ }
+  clearBuffer(buffer,sizeof(buffer));
+  clearBuffer(RF_buf,sizeof(RF_buf));
+  State = READ_SERIAL; 
 }
 //////////////////////////////////////////////////////////////
 void EasybotNano::remoteProcessing(){

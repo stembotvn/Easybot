@@ -116,6 +116,8 @@ Stembot V1.0
 #define RC       4
 #define WRITE_RF 5
 #define IN_CONFIG 6
+#define READ_SERIAL 7
+#define WRITE_SERIAL 8
 ///define for operation Mode
 #define RUN_MODE 0
 #define CONFIG_MODE 1
@@ -131,6 +133,7 @@ Stembot V1.0
 ////////////////////////////
 #define  NRF24L01_INTERFACE 1
 #define  SERIAL_INTERFACE 0
+
 ///////////////////////////
 #define MASTER_NODE 0
 #define MAX_PAYLOAD 24
@@ -154,11 +157,27 @@ public:
   void readRF();
   void parseData();
   void writeRF();
+  void writeSerial();
   void RC_Run();
-  void run();
-  ////
+    //////Processing Global////////////
+  
+  void process();
+  
+  int changeMode();
+  void run();    // processing Scratch command interface (WIRE and WIRELESS)
+  void lightfollow();  // Auto Light Following 
+  void avoidobstacle(); // Auto advoid obstacle
+  void linefollow();  // Auto Line follow obstacle
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
   void PrintDebug(unsigned char *buf,int len);
   void remoteProcessing();
+  void LEDdebug(){
+
+    setColor(255,0,255);
+    delay(500);
+        setColor(0,0,0);
+    delay(500);
+  }
   ////
   int State = 0;
   int processMode = 0;
@@ -196,12 +215,6 @@ public:
   void offRGB();
   bool readButton();
 
-  void process();
-  
-  int changeMode();
-  void lightfollow();
-  void avoidobstacle();
-  void linefollow();
 
   RF24 myRadio=RF24(CE_PIN,CSN_PIN);
   EasyRF Radio = EasyRF(myRadio);
@@ -248,7 +261,7 @@ private:
   unsigned char buffer[32]; //for reading RF
   unsigned char RF_buf[12]; //for writing RF
   uint8_t command_index = 0;
-
+  
   union
   {
     byte byteVal[4];
