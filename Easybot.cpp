@@ -294,9 +294,9 @@ void EasybotNano::initNRF(int _address)
   Radio.setDataSpeed(RF24_250KBPS); 
   Radio.setChannelRF(108);
   Radio.setPowerRF(RF24_PA_LOW);
-  Radio.setRetry(1,0);
+  //Radio.setRetry(10,3);
   Serial.println("NRF wireless ready!"); 
-  //Radio.setAutoACK(false);
+  Radio.setAutoACK(true);
   Radio.init(myNode);
   interface = NRF24L01_INTERFACE;
   first_run = true;      //set first run for next State
