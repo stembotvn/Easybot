@@ -104,10 +104,10 @@ Stembot V1.0
 ///////////////////// RF24 Dogle ////////////////////////
 //////// define Mode process ////////////////////
 #define ONLINE 0
-#define LIGHT 1
-#define LINE 2
-#define AVOID 3
-#define OFFLINE 4
+#define OFFLINE 1
+#define AVOID 2
+#define LINE 3
+#define LIGHT 4
 ////////define State 
 #define READ_RF   0
 #define PARSING   1
@@ -133,7 +133,6 @@ Stembot V1.0
 ////////////////////////////
 #define  NRF24L01_INTERFACE 1
 #define  SERIAL_INTERFACE 0
-
 ///////////////////////////
 #define MASTER_NODE 0
 #define MAX_PAYLOAD 24
